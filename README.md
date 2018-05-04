@@ -1,3 +1,3 @@
-# Bilevel Optimization Benchmark
+# A Benchmark for Bilevel Optimization
 
-Some interesting functions.
+Test Function Suite for Bilevel Optimization
