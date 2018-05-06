@@ -25,10 +25,6 @@ double sphere(double *x, int D){
     return f;
 }
 
-double* array(int D){
-    return (double *) malloc(D * sizeof( double ));
-}
-
 void SDM1_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
@@ -304,47 +300,51 @@ void SDM8_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void blb18_leader_cop(int N, int D, double *x, double *y, double *F, int id){
-    int i, j, p, q, r;
+void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, int id){
+    int i, u, l, p, q, r;
 
     if (id >= 1 && id <= 10 ) {
-        p = 1; q = 1; r = 1;
-        D = 2;
+        int du = D_upper/2;
+        int dl = D_lower/2;
+        p = dl; q = du; r = dl;
+        D_upper = p + r;
+        D_lower = q + r;
     }
 
     for (i = 0; i < N; ++i) {
-        j = i*D;
+        u = i*D_upper;
+        l = i*D_lower;
 
         switch(id) {
             case 1:
-                SDM1_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM1_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 2:
-                SDM2_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM2_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 3:
-                SDM3_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM3_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 4:
-                SDM4_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM4_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 5:
-                SDM5_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM5_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 6:
-                SDM5_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM5_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 7:
-                SDM7_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM7_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 8:
-                SDM8_leader(p, q, r, &x[j], &y[j], &F[i]);
+                SDM8_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             // case 9:
-            //     SDM9_leader(p, q, r, &x[j], &y[j], &F[i]);
+            //     SDM9_leader(p, q, r, &x[u], &y[l], &F[i]);
             //     break;
             // case 10:
-            //     SDM10_leader(p, q, r, &x[j], &y[j], &F[i]);
+            //     SDM10_leader(p, q, r, &x[u], &y[l], &F[i]);
             //     break;
             default:
                 printf("Error\n");
@@ -353,46 +353,51 @@ void blb18_leader_cop(int N, int D, double *x, double *y, double *F, int id){
     }
 }
 
-void blb18_follower_cop(int N, int D, double *x, double *y, double *f, int id){
-    int i, j, p, q, r;
+void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, int id){
+    int i, u, l, p, q, r;
 
     if (id >= 1 && id <= 10 ) {
-        p = 1; q = 1; r = 1;
+        int du = D_upper/2;
+        int dl = D_lower/2;
+        p = dl; q = du; r = dl;
+        D_upper = p + r;
+        D_lower = q + r;
     }
 
     for (i = 0; i < N; ++i) {
-        j = i*D;
+        u = i*D_upper;
+        l = i*D_lower;
 
         switch(id) {
             case 1:
-                SDM1_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM1_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 2:
-                SDM2_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM2_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 3:
-                SDM3_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM3_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 4:
-                SDM4_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM4_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 5:
-                SDM5_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 6:
-                SDM5_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 7:
-                SDM7_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM7_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 8:
-                SDM8_follower(p, q, r, &x[j], &y[j], &f[i]);
+                SDM8_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             // case 9:
-            //     SDM9_follower(p, q, r, &x[j], &y[j], &f[i]);
+            //     SDM9_follower(p, q, r, &x[u], &y[l], &f[i]);
             //     break;
             // case 10:
-            //     SDM10_follower(p, q, r, &x[j], &y[j], &f[i]);
+            //     SDM10_follower(p, q, r, &x[u], &y[l], &f[i]);
             //     break;
             default:
                 printf("Error\n");

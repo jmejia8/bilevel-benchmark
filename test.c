@@ -24,11 +24,12 @@ int main(int argc, char const *argv[])
     int N = 5;
 
     // upper and lower level dimension
-    int D = 2;
+    int D_upper = 2;
+    int D_lower = 2;
 
     // allocate vectors
-    double *x = array(N*D);
-    double *y = array(N*D);
+    double *x = array(N*D_upper);
+    double *y = array(N*D_lower);
 
     // upper level
     double *F = array(N);
@@ -36,15 +37,15 @@ int main(int argc, char const *argv[])
     double *f = array(N);
 
     // random initialization
-    randm(0, 1, x, N*D);
-    randm(0, 1, y, N*D);
+    randm(0, 1, x, N*D_upper);
+    randm(0, 1, y, N*D_lower);
 
 
     printf("run \t i \t F \t \t f \n");
     for (id = 1; id <= 8; ++id) {
         // evaluate
-        blb18_leader_cop(N, D, x, y, F, id);
-        blb18_follower_cop(N, D, x, y, f, id);
+        blb18_leader_cop(N, D_upper, D_lower, x, y, F, id);
+        blb18_follower_cop(N, D_upper, D_lower, x, y, f, id);
 
         for (i = 0; i < N; ++i) {
             printf("%i \t %i \t %e \t %e\n", id, i+1, F[i], f[i] );
