@@ -212,6 +212,98 @@ void SDM5_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
+void SDM7_leader(int p, int q, int r, double *x, double *y, double *F){
+    int i;
+
+    double *x_u1 = x, *x_u2 = &x[p];
+    double *x_l1 = y, *x_l2 = &y[q];
+
+    double F1 = 1.0 + 0.0025*sphere(x_u1, p);
+    double F2 = -sphere(x_l1, p);
+    double F3 = 0.0;
+
+    double aux = 1.0;
+    for (i = 0; i < q; ++i) {
+        aux *= cos(x_u1[i]) / sqrt(i + 1.0) ;
+    }
+
+    F1 -= aux;
+
+    for (i = 0; i < r; ++i) {
+        F3 += x_u2[i] * x_u2[i] - pow( abs(x_u2[i]) - log( x_l2[i]), 2);
+    }
+
+    F[0] = F1 + F2 + F3;
+}
+
+void SDM7_follower(int p, int q, int r, double *x, double *y, double *f){
+    int i;
+
+    double* x_u1 = x, *x_u2 = &x[p];
+    double* x_l1 = y, *x_l2 = &y[q];
+
+    double f1 = 0.0;
+    double f2 = sphere(x_l1, q);
+    double f3 = 0.0;
+
+    for (i = 0; i < q; ++i) f1 += pow(x_u1[i], 3);
+
+    for (i = 0; i < r; ++i)
+        f3 += pow( x_u2[i] - log( x_l2[i]), 2 );
+
+    f[0] = f1 + f2 + f3;
+}
+
+void SDM8_leader(int p, int q, int r, double *x, double *y, double *F){
+    int i;
+
+    double *x_u1 = x, *x_u2 = &x[p];
+    double *x_l1 = y, *x_l2 = &y[q];
+
+    double F1 = 20.0 + E - 20.0*exp(-0.2 * sqrt((1.0 / (double) p) * sphere(x_u1, p)));
+    double F2 = 0.0;
+    double F3 = 0.0;
+
+    double aux = 0.0;
+    for (i = 0; i < p; ++i) {
+        aux += cos(2*PI*x_u1[i]);
+    }
+
+    F1 -= exp( (1.0 / (double) p) * aux);
+
+    for (i = 0; i < q-1; ++i) {
+        F2 -= x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
+    }
+
+    for (i = 0; i < r; ++i) {
+        F3 += x_u2[i] * x_u2[i] - pow( x_u2[i] - pow( x_l2[i], 3), 2);
+    }
+
+    F[0] = F1 + F2 + F3;
+}
+
+void SDM8_follower(int p, int q, int r, double *x, double *y, double *f){
+    int i;
+
+    double* x_u1 = x, *x_u2 = &x[p];
+    double* x_l1 = y, *x_l2 = &y[q];
+
+    double f1 = 0.0;
+    double f2 = sphere(x_l1, q);
+    double f3 = 0.0;
+
+    for (i = 0; i < p; ++i)
+        f1 += abs(x_u1[i]);
+    
+    for (i = 0; i < q-1; ++i) 
+        f2 += x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
+
+    for (i = 0; i < r; ++i)
+        f3 += pow( x_u2[i] - pow( x_l2[i], 3), 2);
+
+    f[0] = f1 + f2 + f3;
+}
+
 void blb18_leader_cop(int N, int D, double *x, double *y, double *F, int id){
     int i, j, p, q, r;
 
@@ -242,12 +334,12 @@ void blb18_leader_cop(int N, int D, double *x, double *y, double *F, int id){
             // case 6:
             //     SDM6_leader(p, q, r, &x[j], &y[j], &f[i]);
             //     break;
-            // case 7:
-            //     SDM7_leader(p, q, r, &x[j], &y[j], &f[i]);
-            //     break;
-            // case 8:
-            //     SDM8_leader(p, q, r, &x[j], &y[j], &f[i]);
-            //     break;
+            case 7:
+                SDM7_leader(p, q, r, &x[j], &y[j], &F[i]);
+                break;
+            case 8:
+                SDM8_leader(p, q, r, &x[j], &y[j], &F[i]);
+                break;
             // case 9:
             //     SDM9_leader(p, q, r, &x[j], &y[j], &f[i]);
             //     break;
@@ -290,12 +382,12 @@ void blb18_follower_cop(int N, int D, double *x, double *y, double *f, int id){
             // case 6:
             //     SDM6_follower(p, q, r, &x[j], &y[j], &f[i]);
             //     break;
-            // case 7:
-            //     SDM7_follower(p, q, r, &x[j], &y[j], &f[i]);
-            //     break;
-            // case 8:
-            //     SDM8_follower(p, q, r, &x[j], &y[j], &f[i]);
-            //     break;
+            case 7:
+                SDM7_follower(p, q, r, &x[j], &y[j], &f[i]);
+                break;
+            case 8:
+                SDM8_follower(p, q, r, &x[j], &y[j], &f[i]);
+                break;
             // case 9:
             //     SDM9_follower(p, q, r, &x[j], &y[j], &f[i]);
             //     break;
