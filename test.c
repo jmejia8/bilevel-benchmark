@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include "blb18_cop.c"
+#include "blb18_op.c"
 
 void randm(double a, double b, double *x, int D){
     int i;
@@ -10,37 +10,46 @@ void randm(double a, double b, double *x, int D){
     }
 }
 
+
+double* array(int D){
+    return (double *) malloc(D * sizeof( double ));
+}
+
 int main(int argc, char const *argv[])
 {
+    srand(time(NULL));
+    int i, id;
+ 
     // population size
-    int N = 17;
+    int N = 5;
 
-    // upper and lower lever dimension
+    // upper and lower level dimension
     int D = 2;
 
-    // number of test function
-    int id = 5;
-
+    // allocate vectors
     double *x = array(N*D);
     double *y = array(N*D);
 
     // upper level
     double *F = array(N);
-    // upper lower
+    // lower lower
     double *f = array(N);
 
-    srand(time(NULL));
+    // random initialization
+    randm(0, 1, x, N*D);
+    randm(0, 1, y, N*D);
 
-    randm(-1, 1, x, N*D);
-    randm(-1, 1, y, N*D);
 
-    // evaluate
-    blb18_leader_cop(N, D, x, y, F, id);
-    blb18_follower_cop(N, D, x, y, f, id);
+    printf("run \t i \t F \t \t f \n");
+    for (id = 1; id <= 8; ++id) {
+        // evaluate
+        blb18_leader_cop(N, D, x, y, F, id);
+        blb18_follower_cop(N, D, x, y, f, id);
 
-    int i;
-    for (i = 0; i < N; ++i) {
-        printf("%i \t %e \t %e\n",i+1, F[i], f[i] );
+        for (i = 0; i < N; ++i) {
+            printf("%i \t %i \t %e \t %e\n", id, i+1, F[i], f[i] );
+        }
+        
     }
 
     return 0;
