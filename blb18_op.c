@@ -141,7 +141,7 @@ void SDM4_leader(int p, int q, int r, double *x, double *y, double *F){
     double F3 = 0.0;
 
     for (i = 0; i < r; ++i) {
-        F3 += x_u2[i] * x_u2[i] + pow( abs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
+        F3 += x_u2[i] * x_u2[i] - pow( abs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
     }
 
     F[0] = F1 + F2 + F3;
