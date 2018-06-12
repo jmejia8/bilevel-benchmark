@@ -208,6 +208,43 @@ void SDM5_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
+void SDM6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
+    int i;
+
+    double *x_u1 = x, *x_u2 = &x[p];
+    double *x_l1 = y, *x_l2 = &y[q];
+
+    double F1 = sphere(x_u1, p);
+    double F2 = -sphere(x_l1, q) + sphere(&x_l1[q], s) ;
+    double F3 = sphere(x_u2, r);
+
+    for (i = 0; i < r; ++i) {
+        F3 -= pow( abs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
+    }
+
+    F[0] = F1 + F2 + F3;
+}
+
+void SDM6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
+    int i;
+
+    double* x_u1 = x, *x_u2 = &x[p];
+    double* x_l1 = y, *x_l2 = &y[q];
+
+    double f1 = sphere(x_u1, p);
+    double f2 = sphere(x_l1, q);
+    double f3 = 0.0;
+
+    for (i = q; i < q+s-1; i += 2) {
+        f2 += pow(x_l1[i+1] - x_l1[i], 2);
+    }
+
+    for (i = 0; i < r; ++i)
+        f3 += pow( x_u2[i] + x_l2[i], 2);
+
+    f[0] = f1 + f2 + f3;
+}
+
 void SDM7_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
@@ -332,7 +369,7 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
                 SDM5_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 6:
-                SDM5_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SDM6_leader(p, q/2, r, q/2, &x[u], &y[l], &F[i]);
                 break;
             case 7:
                 SDM7_leader(p, q, r, &x[u], &y[l], &F[i]);
@@ -340,12 +377,6 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
             case 8:
                 SDM8_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
-            // case 9:
-            //     SDM9_leader(p, q, r, &x[u], &y[l], &F[i]);
-            //     break;
-            // case 10:
-            //     SDM10_leader(p, q, r, &x[u], &y[l], &F[i]);
-            //     break;
             default:
                 printf("Error\n");
                 break;
@@ -385,7 +416,7 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
                 SDM5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 6:
-                SDM5_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SDM6_follower(p, q/2, r, q/2, &x[u], &y[l], &f[i]);
                 break;
             case 7:
                 SDM7_follower(p, q, r, &x[u], &y[l], &f[i]);
@@ -393,12 +424,6 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
             case 8:
                 SDM8_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
-            // case 9:
-            //     SDM9_follower(p, q, r, &x[u], &y[l], &f[i]);
-            //     break;
-            // case 10:
-            //     SDM10_follower(p, q, r, &x[u], &y[l], &f[i]);
-            //     break;
             default:
                 printf("Error\n");
                 break;

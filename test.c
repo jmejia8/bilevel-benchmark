@@ -24,8 +24,8 @@ int main(int argc, char const *argv[])
     int N = 5;
 
     // upper and lower level dimension
-    int D_upper = 2;
-    int D_lower = 2;
+    int D_upper = 10;
+    int D_lower = 10;
 
     // allocate vectors
     double *x = array(N*D_upper);
@@ -41,7 +41,7 @@ int main(int argc, char const *argv[])
     randm(0, 1, y, N*D_lower);
 
 
-    printf("run \t i \t F \t \t f \n");
+    printf("Problem  i \t F \t \t f \n");
     for (id = 1; id <= 8; ++id) {
         // evaluate
         blb18_leader_cop(N, D_upper, D_lower, x, y, F, id);
@@ -50,6 +50,7 @@ int main(int argc, char const *argv[])
         for (i = 0; i < N; ++i) {
             printf("%i \t %i \t %e \t %e\n", id, i+1, F[i], f[i] );
         }
+        printf("---------------------------------------------\n");
         
     }
 
