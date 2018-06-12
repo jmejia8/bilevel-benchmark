@@ -8,3 +8,6 @@ all: $(TAR)
 
 %.so: %.c
 	$(CC) $(CFLAGS-add)  -march=native -o $@ $^
+
+clean:
+	rm *.so
