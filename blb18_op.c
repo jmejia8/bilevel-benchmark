@@ -178,7 +178,7 @@ void SDM5_leader(int p, int q, int r, double *x, double *y, double *F){
     double F3 = 0.0;
 
     for (i = 0; i < q-1; ++i) {
-        F2 -= ( x_l1[i+1] - x_l1[i]*x_l1[i] ) + pow(x_l1[i] - 1.0, 2);
+        F2 -= pow( x_l1[i+1] - x_l1[i]*x_l1[i], 2) + pow(x_l1[i] - 1.0, 2);
     }
 
     for (i = 0; i < r; ++i) {
@@ -199,7 +199,7 @@ void SDM5_follower(int p, int q, int r, double *x, double *y, double *f){
     double f3 = 0.0;
 
     for (i = 0; i < q-1; ++i) {
-        f2 += ( x_l1[i+1] - x_l1[i]*x_l1[i] ) + pow(x_l1[i] - 1.0, 2);
+        f2 += pow( x_l1[i+1] - x_l1[i]*x_l1[i], 2) + pow(x_l1[i] - 1.0, 2);
     }
 
     for (i = 0; i < r; ++i)
@@ -219,7 +219,7 @@ void SDM6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
     double F3 = sphere(x_u2, r);
 
     for (i = 0; i < r; ++i) {
-        F3 -= pow( abs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
+        F3 -= pow( x_u2[i] - x_l2[i], 2);
     }
 
     F[0] = F1 + F2 + F3;
@@ -240,7 +240,7 @@ void SDM6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
     }
 
     for (i = 0; i < r; ++i)
-        f3 += pow( x_u2[i] + x_l2[i], 2);
+        f3 += pow( x_u2[i] - x_l2[i], 2);
 
     f[0] = f1 + f2 + f3;
 }
@@ -304,8 +304,8 @@ void SDM8_leader(int p, int q, int r, double *x, double *y, double *F){
 
     F1 -= exp( (1.0 / (double) p) * aux);
 
-    for (i = 0; i < q; ++i) {
-        F2 -= x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
+    for (i = 0; i < q-1; ++i) {
+        F2 -= pow(x_l1[i+1] - x_l1[i]*x_l1[i], 2) + pow( x_l1[i] - 1.0, 2);
     }
 
     for (i = 0; i < r; ++i) {
@@ -328,8 +328,8 @@ void SDM8_follower(int p, int q, int r, double *x, double *y, double *f){
     for (i = 0; i < p; ++i)
         f1 += abs(x_u1[i]);
     
-    for (i = 0; i < q; ++i) 
-        f2 += x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
+    for (i = 0; i < q-1; ++i) 
+        f2 += pow(x_l1[i+1] - x_l1[i]*x_l1[i], 2) + pow( x_l1[i] - 1.0, 2);
 
     for (i = 0; i < r; ++i)
         f3 += pow( x_u2[i] - pow( x_l2[i], 3), 2);
