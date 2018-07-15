@@ -25,7 +25,7 @@ double sphere(double *x, int D){
     return f;
 }
 
-void SDM1_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD1_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -42,7 +42,7 @@ void SDM1_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM1_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD1_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -58,7 +58,7 @@ void SDM1_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM2_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD2_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -75,7 +75,7 @@ void SDM2_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM2_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD2_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -91,7 +91,7 @@ void SDM2_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM3_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD3_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -110,7 +110,7 @@ void SDM3_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM3_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD3_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -130,7 +130,7 @@ void SDM3_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM4_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD4_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -147,7 +147,7 @@ void SDM4_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM4_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD4_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -167,7 +167,7 @@ void SDM4_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM5_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD5_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -188,7 +188,7 @@ void SDM5_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM5_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD5_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -208,7 +208,7 @@ void SDM5_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
+void SMD6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -225,7 +225,7 @@ void SDM6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
+void SMD6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -245,7 +245,7 @@ void SDM6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM7_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD7_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -269,7 +269,7 @@ void SDM7_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM7_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD7_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -287,7 +287,7 @@ void SDM7_follower(int p, int q, int r, double *x, double *y, double *f){
     f[0] = f1 + f2 + f3;
 }
 
-void SDM8_leader(int p, int q, int r, double *x, double *y, double *F){
+void SMD8_leader(int p, int q, int r, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
@@ -315,7 +315,7 @@ void SDM8_leader(int p, int q, int r, double *x, double *y, double *F){
     F[0] = F1 + F2 + F3;
 }
 
-void SDM8_follower(int p, int q, int r, double *x, double *y, double *f){
+void SMD8_follower(int p, int q, int r, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
@@ -354,28 +354,28 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
 
         switch(id) {
             case 1:
-                SDM1_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD1_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 2:
-                SDM2_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD2_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 3:
-                SDM3_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD3_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 4:
-                SDM4_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD4_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 5:
-                SDM5_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD5_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 6:
-                SDM6_leader(p, q/2, r, q/2, &x[u], &y[l], &F[i]);
+                SMD6_leader(p, q/2, r, q/2, &x[u], &y[l], &F[i]);
                 break;
             case 7:
-                SDM7_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD7_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 8:
-                SDM8_leader(p, q, r, &x[u], &y[l], &F[i]);
+                SMD8_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             default:
                 printf("Error\n");
@@ -401,28 +401,28 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
 
         switch(id) {
             case 1:
-                SDM1_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD1_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 2:
-                SDM2_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD2_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 3:
-                SDM3_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD3_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 4:
-                SDM4_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD4_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 5:
-                SDM5_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 6:
-                SDM6_follower(p, q/2, r, q/2, &x[u], &y[l], &f[i]);
+                SMD6_follower(p, q/2, r, q/2, &x[u], &y[l], &f[i]);
                 break;
             case 7:
-                SDM7_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD7_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 8:
-                SDM8_follower(p, q, r, &x[u], &y[l], &f[i]);
+                SMD8_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             default:
                 printf("Error\n");

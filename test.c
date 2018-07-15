@@ -31,29 +31,29 @@ int test(){
             x[i] = 0; y[i] = 0;
     }
 
-    SDM1_leader(p, q, r, x, y, F);
-    SDM1_follower(p, q, r, x, y, f);
+    SMD1_leader(p, q, r, x, y, F);
+    SMD1_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("1 --> %e\n", F[0]);
         Fv += F[0];
     }
     
-    SDM3_leader(p, q, r, x, y, F);
-    SDM3_follower(p, q, r, x, y, f);
+    SMD3_leader(p, q, r, x, y, F);
+    SMD3_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("3 --> %e\n", F[0]);
         Fv += F[0];
     }
 
-    SDM4_leader(p, q, r, x, y, F);
-    SDM4_follower(p, q, r, x, y, f);
+    SMD4_leader(p, q, r, x, y, F);
+    SMD4_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("4 --> %e\n", F[0]);
         Fv += F[0];
     }
 
-    SDM6_leader(p, 1, r, 2, x, y, F);
-    SDM6_follower(p, 1, r, 2, x, y, f);
+    SMD6_leader(p, 1, r, 2, x, y, F);
+    SMD6_follower(p, 1, r, 2, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("6 --> %e\n", F[0]);
         Fv += F[0];
@@ -61,15 +61,15 @@ int test(){
 
     for (i = q; i < D; ++i) y[i] = 1;
 
-    SDM2_leader(p, q, r, x, y, F);
-    SDM2_follower(p, q, r, x, y, f);
+    SMD2_leader(p, q, r, x, y, F);
+    SMD2_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("2 --> %e\n", F[0]);
         Fv += F[0];
     }
 
-    SDM7_leader(p, q, r, x, y, F);
-    SDM7_follower(p, q, r, x, y, f);
+    SMD7_leader(p, q, r, x, y, F);
+    SMD7_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("7 --> %e\n", F[0]);
         Fv += F[0];
@@ -79,16 +79,16 @@ int test(){
     for (i = 0; i < D; ++i) y[i] = 0;
     for (i = 0; i < q; ++i) y[i] = 1;    
     
-    SDM5_leader(p, q, r, x, y, F);
-    SDM5_follower(p, q, r, x, y, f);
+    SMD5_leader(p, q, r, x, y, F);
+    SMD5_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("5 --> %e\n", F[0]);
         Fv += F[0];
     }
 
 
-    SDM8_leader(p, q, r, x, y, F);
-    SDM8_follower(p, q, r, x, y, f);
+    SMD8_leader(p, q, r, x, y, F);
+    SMD8_follower(p, q, r, x, y, f);
     if (F[0] + f[0] != 0) {
         printf("8 --> %e\n", F[0]);
         Fv += F[0];
