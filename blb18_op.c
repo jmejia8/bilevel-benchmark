@@ -122,7 +122,7 @@ void SDM3_follower(int p, int q, int r, double *x, double *y, double *f){
 
     double pi2 = 2*PI;
     for (i = 0; i < q; ++i)
-        f2 += pow( x_l1[i]*x_l1[i] - cos( pi2* x_l1[i] ), 2);
+        f2 += x_l1[i]*x_l1[i] - cos( pi2* x_l1[i] );
 
     for (i = 0; i < r; ++i)
         f3 += pow( x_u2[i]*x_u2[i] - tan( x_l2[i] ), 2);
@@ -159,7 +159,7 @@ void SDM4_follower(int p, int q, int r, double *x, double *y, double *f){
 
     double pi2 = 2*PI;
     for (i = 0; i < q; ++i)
-        f2 += pow( x_l1[i]*x_l1[i] - cos( pi2* x_l1[i] ), 2);
+        f2 += x_l1[i]*x_l1[i] - cos( pi2* x_l1[i] );
 
     for (i = 0; i < r; ++i)
         f3 += pow( abs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
@@ -304,7 +304,7 @@ void SDM8_leader(int p, int q, int r, double *x, double *y, double *F){
 
     F1 -= exp( (1.0 / (double) p) * aux);
 
-    for (i = 0; i < q-1; ++i) {
+    for (i = 0; i < q; ++i) {
         F2 -= x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
     }
 
@@ -322,13 +322,13 @@ void SDM8_follower(int p, int q, int r, double *x, double *y, double *f){
     double* x_l1 = y, *x_l2 = &y[q];
 
     double f1 = 0.0;
-    double f2 = sphere(x_l1, q);
+    double f2 = 0.0;
     double f3 = 0.0;
 
     for (i = 0; i < p; ++i)
         f1 += abs(x_u1[i]);
     
-    for (i = 0; i < q-1; ++i) 
+    for (i = 0; i < q; ++i) 
         f2 += x_l1[i+1] - x_l1[i]*x_l1[i] + pow( x_l1[i] - 1.0, 2);
 
     for (i = 0; i < r; ++i)
