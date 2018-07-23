@@ -138,10 +138,10 @@ void SMD4_leader(int p, int q, int r, double *x, double *y, double *F){
 
     double F1 =  sphere(x_u1, p);
     double F2 = -sphere(x_l1, q);
-    double F3 = 0.0;
+    double F3 =  sphere(x_u2, r);
 
     for (i = 0; i < r; ++i) {
-        F3 += x_u2[i] * x_u2[i] - pow( abs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
+        F3 -= pow( fabs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
     }
 
     F[0] = F1 + F2 + F3;
@@ -162,7 +162,7 @@ void SMD4_follower(int p, int q, int r, double *x, double *y, double *f){
         f2 += x_l1[i]*x_l1[i] - cos( pi2* x_l1[i] );
 
     for (i = 0; i < r; ++i)
-        f3 += pow( abs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
+        f3 += pow( fabs(x_u2[i]) - log( 1.0 + x_l2[i] ), 2);
 
     f[0] = f1 + f2 + f3;
 }
@@ -182,7 +182,7 @@ void SMD5_leader(int p, int q, int r, double *x, double *y, double *F){
     }
 
     for (i = 0; i < r; ++i) {
-        F3 += x_u2[i] * x_u2[i] - pow( abs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
+        F3 += x_u2[i] * x_u2[i] - pow( fabs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
     }
 
     F[0] = F1 + F2 + F3;
@@ -203,7 +203,7 @@ void SMD5_follower(int p, int q, int r, double *x, double *y, double *f){
     }
 
     for (i = 0; i < r; ++i)
-        f3 += pow( abs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
+        f3 += pow( fabs(x_u2[i]) - pow( x_l2[i], 2 ), 2);
 
     f[0] = f1 + f2 + f3;
 }
@@ -212,7 +212,7 @@ void SMD6_leader(int p, int q, int r, int s, double *x, double *y, double *F){
     int i;
 
     double *x_u1 = x, *x_u2 = &x[p];
-    double *x_l1 = y, *x_l2 = &y[q];
+    double *x_l1 = y, *x_l2 = &y[q+s];
 
     double F1 = sphere(x_u1, p);
     double F2 = -sphere(x_l1, q) + sphere(&x_l1[q], s) ;
@@ -229,7 +229,7 @@ void SMD6_follower(int p, int q, int r, int s, double *x, double *y, double *f){
     int i;
 
     double* x_u1 = x, *x_u2 = &x[p];
-    double* x_l1 = y, *x_l2 = &y[q];
+    double* x_l1 = y, *x_l2 = &y[q+s];
 
     double f1 = sphere(x_u1, p);
     double f2 = sphere(x_l1, q);
@@ -326,7 +326,7 @@ void SMD8_follower(int p, int q, int r, double *x, double *y, double *f){
     double f3 = 0.0;
 
     for (i = 0; i < p; ++i)
-        f1 += abs(x_u1[i]);
+        f1 += fabs(x_u1[i]);
     
     for (i = 0; i < q-1; ++i) 
         f2 += pow(x_l1[i+1] - x_l1[i]*x_l1[i], 2) + pow( x_l1[i] - 1.0, 2);
@@ -338,15 +338,20 @@ void SMD8_follower(int p, int q, int r, double *x, double *y, double *f){
 }
 
 void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, int id){
-    int i, u, l, p, q, r;
+    int i, u, l, p, q, r, s;
 
-    if (id >= 1 && id <= 10 ) {
-        int du = D_upper/2;
-        int dl = D_lower/2;
-        p = dl; q = du; r = dl;
-        D_upper = p + r;
-        D_lower = q + r;
+    r = D_upper / 2;
+    p = D_upper - r;
+    
+    if (id == 6) {
+        q = (int) floor( (D_lower - r) / 2);
+        s = (int)  ceil( EPS + (D_lower - r) / 2);
+    }else{
+        r = D_upper / 2;
+        q = D_lower - r;
     }
+
+    printf("%d %d %d %d\n",p,q,r,s );
 
     for (i = 0; i < N; ++i) {
         u = i*D_upper;
@@ -369,7 +374,7 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
                 SMD5_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 6:
-                SMD6_leader(p, q/2, r, q/2, &x[u], &y[l], &F[i]);
+                SMD6_leader(p, q, r, s, &x[u], &y[l], &F[i]);
                 break;
             case 7:
                 SMD7_leader(p, q, r, &x[u], &y[l], &F[i]);
@@ -385,14 +390,17 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
 }
 
 void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, int id){
-    int i, u, l, p, q, r;
+    int i, u, l, p, q, r, s;
 
-    if (id >= 1 && id <= 10 ) {
-        int du = D_upper/2;
-        int dl = D_lower/2;
-        p = dl; q = du; r = dl;
-        D_upper = p + r;
-        D_lower = q + r;
+    r = D_upper / 2;
+    p = D_upper - r;
+    
+    if (id == 6) {
+        q = (int) floor( (D_lower - r) / 2);
+        s = (int)  ceil( EPS + (D_lower - r) / 2);
+    }else{
+        r = D_upper / 2;
+        q = D_lower - r;
     }
 
     for (i = 0; i < N; ++i) {
