@@ -349,7 +349,7 @@ void SMD9_leader(int p, int q, int r, double *x, double *y, double *F, double *G
     double F3 =  0.0;
 
     for (i = 0; i < r; ++i) {
-        F3 -= pow(x_u2[i], 2) - pow( x_u2[i] - log( 1.0 + x_l2[i] ), 2);
+        F3 += pow(x_u2[i], 2) - pow( x_u2[i] - log( 1.0 + x_l2[i] ), 2);
     }
 
     F[0] = F1 + F2 + F3;
@@ -370,7 +370,7 @@ void SMD9_follower(int p, int q, int r, double *x, double *y, double *f, double 
     double f3 =  0.0;
 
     for (i = 0; i < r; ++i) {
-        f3 -= pow( x_u2[i] - log( 1.0 + x_l2[i] ), 2);
+        f3 += pow( x_u2[i] - log( 1.0 + x_l2[i] ), 2);
     }
 
     f[0] = f1 + f2 + f3;
@@ -400,7 +400,7 @@ void SMD10_leader(int p, int q, int r, double *x, double *y, double *F, double *
     F[0] = F1 + F2 + F3;
 
     double xu1_3[p];
-    double xu2_3[p];
+    double xu2_3[r];
 
     for (i = 0; i < p; ++i) { xu1_3[i] = pow(x_u1[i], 3); }
     for (i = 0; i < r; ++i) { xu2_3[i] = pow(x_u2[i], 3); }
@@ -576,14 +576,14 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
     for (i = 0; i < p; ++i) { sum_xl1_3 += xl1_3[i]; }
 
 
-    g[0] = f3;
+    g[0] = f3-1.0;
 
     for (i = 1; i <= q; ++i) {
         g[i] = x_l1[i] - (sum_xl1_3 - xl1_3[i]);
     }
 }
 
-void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, int id){
+void blb18_leader(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
     int i, u, l, p, q, r, s;
 
     r = D_upper / 2;
@@ -626,14 +626,26 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
             case 8:
                 SMD8_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
+            case 9:
+                SMD9_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                break;
+            case 10:
+                SMD10_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                break;
+            case 11:
+                SMD11_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                break;
+            case 12:
+                SMD12_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                break;
             default:
-                printf("Error\n");
+                printf("Error: Invalid function id (1,2,...,12).\n");
                 break;
         }
     }
 }
 
-void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, int id){
+void blb18_follower(int N, int D_upper, int D_lower, double *x, double *y, double *f, double *g, int id){
     int i, u, l, p, q, r, s;
 
     r = D_upper / 2;
@@ -676,8 +688,20 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
             case 8:
                 SMD8_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
+            case 9:
+                SMD9_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                break;
+            case 10:
+                SMD10_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                break;
+            case 11:
+                SMD11_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                break;
+            case 12:
+                SMD12_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                break;
             default:
-                printf("Error\n");
+                printf("Error: Invalid function id (1,2,...,12).\n");
                 break;
         }
     }
