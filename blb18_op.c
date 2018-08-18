@@ -598,6 +598,20 @@ void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
     }
 
     settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
+
+    if (fnum == 9){   
+        settings[4] = 1;
+        settings[5] = 1;
+    } else if (fnum == 10){
+        settings[4] = p+r;
+        settings[5] = q;
+    } else if (fnum == 11){
+        settings[4] = r;
+        settings[5] = 1;
+    } else if (fnum == 12){
+        settings[4] = 2*r + p;
+        settings[5] = q+1;
+    }
 }
 
 void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
@@ -707,7 +721,7 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
 }
 
 void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bounds_ll, int fnum){
-    int settings[4];
+    int settings[6];
 
     blb18_cop_settings(D_upper, D_lower, settings, fnum);
     
@@ -767,7 +781,7 @@ void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bound
 
 void blb18_cop_solutions(int D_upper, int D_lower, double *x, double *y, int fnum){
 
-    int settings[4], i;
+    int settings[6], i;
     blb18_cop_settings(D_upper, D_lower, settings, fnum);
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
