@@ -783,6 +783,24 @@ void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bound
 
 }
 
-void blb18_cop_solutions(int D_upper, int D_lower, int fnum){
-    
+void blb18_cop_solutions(int D_upper, int D_lower, double *x, double *y, int fnum){
+
+    int settings[4], i;
+    blb18_cop_settings(D_upper, D_lower, settings, fnum);
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+
+    for (i = 0; i < D_upper; ++i)x[i] = 0;
+    for (i = 0; i < D_lower; ++i) y[i] = 0;
+
+    if (fnum == 2 || fnum == 7){
+        for (i = q; i < D_lower; ++i) y[i] = 1;
+    }
+
+
+    if (fnum == 5 || fnum == 8) {
+        for (i = 0; i < D_lower; ++i) y[i] = 0;
+        for (i = 0; i < q; ++i) y[i] = 1; 
+    }
+
+
 }
