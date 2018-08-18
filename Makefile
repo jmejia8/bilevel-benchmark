@@ -11,3 +11,6 @@ all: $(TAR)
 
 clean:
 	rm *.so
+
+test:
+	$(CC) test.c -lm  -march=native -o test.so && ./test.so
