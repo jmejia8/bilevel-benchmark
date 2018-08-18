@@ -583,7 +583,7 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
     }
 }
 
-void blb18_leader(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
+void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
     int i, u, l, p, q, r, s;
 
     r = D_upper / 2;
@@ -645,7 +645,7 @@ void blb18_leader(int N, int D_upper, int D_lower, double *x, double *y, double 
     }
 }
 
-void blb18_follower(int N, int D_upper, int D_lower, double *x, double *y, double *f, double *g, int id){
+void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, double *g, int id){
     int i, u, l, p, q, r, s;
 
     r = D_upper / 2;
@@ -705,4 +705,84 @@ void blb18_follower(int N, int D_upper, int D_lower, double *x, double *y, doubl
                 break;
         }
     }
+}
+
+void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
+    int p, q, r, s;
+
+    r = D_upper / 2;
+    p = D_upper - r;
+    
+    if (fnum == 6) {
+        q = (int) floor( (D_lower - r) / 2);
+        s = (int)  ceil( EPS + (D_lower - r) / 2);
+    }else{
+        r = D_upper / 2;
+        q = D_lower - r;
+    }
+
+    settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
+}
+
+void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bounds_ll, int fnum){
+    int settings[4];
+
+    blb18_cop_settings(D_upper, D_lower, settings, fnum);
+    
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+
+
+    int i;
+    double ul1_a, ul1_b, ul2_a, ul2_b, ll1_a, ll1_b, ll2_a, ll2_b;
+    if (fnum == 1 || fnum == 3){
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a = -PI/2 + EPS; ll2_b = PI/2 - EPS;
+    } else if (fnum == 2 || fnum == 7){
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 1.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a =  EPS; ll2_b = E ;   
+    } else if (fnum == 4){   
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -1.0; ul2_b = 1.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a =  0; ll2_b = E ;
+    } else if (fnum == 5  || fnum == 6 || fnum == 8){   
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -5.0; ll2_b = 10.0;
+    }
+
+    for (i = 0; i < p; ++i) {
+        bounds_ul[i] = ul1_a;
+        bounds_ul[D_upper + i] = ul1_b;
+    }
+    
+    for (i = p; i < p + r; ++i){
+        bounds_ul[i] = ul2_a;
+        bounds_ul[D_upper + i] = ul2_b;
+    }
+
+    for (i = 0; i < q; ++i){
+        bounds_ll[i] = ll1_a;
+        bounds_ll[D_upper + i] = ll1_b;
+    }
+
+    for (i = q; i < q+r+s; ++i){
+        bounds_ll[i] = ll2_a;
+        bounds_ll[D_upper + i] = ll2_b;
+    }
+
+
+}
+
+void blb18_cop_solutions(int D_upper, int D_lower, int fnum){
+    
 }
