@@ -583,19 +583,27 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
     }
 }
 
-void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
-    int i, u, l, p, q, r, s;
+void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
+    int p, q, r, s;
 
     r = D_upper / 2;
     p = D_upper - r;
     
-    if (id == 6) {
+    if (fnum == 6) {
         q = (int) floor( (D_lower - r) / 2);
         s = (int)  ceil( EPS + (D_lower - r) / 2);
     }else{
         r = D_upper / 2;
         q = D_lower - r;
     }
+
+    settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
+}
+
+void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
+    int i, u, l, settings[4];
+
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
     for (i = 0; i < N; ++i) {
         u = i*D_upper;
@@ -646,18 +654,9 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
 }
 
 void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, double *g, int id){
-    int i, u, l, p, q, r, s;
+    int i, u, l, settings[4];
 
-    r = D_upper / 2;
-    p = D_upper - r;
-    
-    if (id == 6) {
-        q = (int) floor( (D_lower - r) / 2);
-        s = (int)  ceil( EPS + (D_lower - r) / 2);
-    }else{
-        r = D_upper / 2;
-        q = D_lower - r;
-    }
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
     for (i = 0; i < N; ++i) {
         u = i*D_upper;
@@ -680,7 +679,7 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
                 SMD5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 6:
-                SMD6_follower(p, q/2, r, q/2, &x[u], &y[l], &f[i]);
+                SMD6_follower(p, q, r, q, &x[u], &y[l], &f[i]);
                 break;
             case 7:
                 SMD7_follower(p, q, r, &x[u], &y[l], &f[i]);
@@ -705,23 +704,6 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
                 break;
         }
     }
-}
-
-void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
-    int p, q, r, s;
-
-    r = D_upper / 2;
-    p = D_upper - r;
-    
-    if (fnum == 6) {
-        q = (int) floor( (D_lower - r) / 2);
-        s = (int)  ceil( EPS + (D_lower - r) / 2);
-    }else{
-        r = D_upper / 2;
-        q = D_lower - r;
-    }
-
-    settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
 }
 
 void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bounds_ll, int fnum){
