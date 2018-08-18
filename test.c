@@ -132,8 +132,8 @@ int main(int argc, char const *argv[])
     printf("Problem  i \t F \t \t f \n");
     for (id = 1; id <= 8; ++id) {
         // evaluate
-        blb18_leader_cop(N, D_upper, D_lower, x, y, F, id);
-        blb18_follower_cop(N, D_upper, D_lower, x, y, f, id);
+        blb18_leader_cop(N, D_upper, D_lower, x, y, F, NULL, id);
+        blb18_follower_cop(N, D_upper, D_lower, x, y, f, NULL, id);
 
         for (i = 0; i < N; ++i) {
             printf("%i \t %i \t %e \t %e\n", id, i+1, F[i], f[i] );
