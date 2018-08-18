@@ -17,19 +17,20 @@ double* array(int D){
 
 int test(){
     int p=3, q=3, r=2, s=0;
-    int D = p + r;
+    int D_upper = p + r;
+    int D_lower = q + r;
 
-    double *x = array(D);
-    double *y = array(D);
+    double *x = array(D_upper);
+    double *y = array(D_lower);
     double F[1], f[1], Fv = 0;
 
     F[0] = 1000; f[0] = 1000;
 
     int i = 0;
 
-    for (i = 0; i < D; ++i){
-            x[i] = 0; y[i] = 0;
-    }
+    ///////////////////////////////////////////////// 
+    ///////////////////////////////////////////////// 
+    blb18_cop_solutions(D_upper, D_lower, x, y, 1);
 
     SMD1_leader(p, q, r, x, y, F);
     SMD1_follower(p, q, r, x, y, f);
@@ -59,7 +60,9 @@ int test(){
         Fv += F[0];
     }
 
-    for (i = q; i < D; ++i) y[i] = 1;
+    ///////////////////////////////////////////////// 
+    ///////////////////////////////////////////////// 
+    blb18_cop_solutions(D_upper, D_lower, x, y, 2);
 
     SMD2_leader(p, q, r, x, y, F);
     SMD2_follower(p, q, r, x, y, f);
@@ -76,8 +79,9 @@ int test(){
     }
 
 
-    for (i = 0; i < D; ++i) y[i] = 0;
-    for (i = 0; i < q; ++i) y[i] = 1;    
+    ///////////////////////////////////////////////// 
+    ///////////////////////////////////////////////// 
+    blb18_cop_solutions(D_upper, D_lower, x, y, 5);
     
     SMD5_leader(p, q, r, x, y, F);
     SMD5_follower(p, q, r, x, y, f);
