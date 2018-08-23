@@ -17,11 +17,11 @@ double* array(int D){
 
 int test(){
     int p=3, q=3, r=2, s=0;
-    int D_upper = p + r;
-    int D_lower = q + r;
+    int D_ul = p + r;
+    int D_ll = q + r;
 
-    double *x = array(D_upper);
-    double *y = array(D_lower);
+    double *x = array(D_ul);
+    double *y = array(D_ll);
     double F[1], f[1], Fv = 0;
 
     F[0] = 1000; f[0] = 1000;
@@ -30,7 +30,7 @@ int test(){
 
     ///////////////////////////////////////////////// 
     ///////////////////////////////////////////////// 
-    blb18_cop_solutions(D_upper, D_lower, x, y, 1);
+    blb18_cop_solutions(D_ul, D_ll, x, y, 1);
 
     SMD1_leader(p, q, r, x, y, F);
     SMD1_follower(p, q, r, x, y, f);
@@ -62,7 +62,7 @@ int test(){
 
     ///////////////////////////////////////////////// 
     ///////////////////////////////////////////////// 
-    blb18_cop_solutions(D_upper, D_lower, x, y, 2);
+    blb18_cop_solutions(D_ul, D_ll, x, y, 2);
 
     SMD2_leader(p, q, r, x, y, F);
     SMD2_follower(p, q, r, x, y, f);
@@ -81,7 +81,7 @@ int test(){
 
     ///////////////////////////////////////////////// 
     ///////////////////////////////////////////////// 
-    blb18_cop_solutions(D_upper, D_lower, x, y, 5);
+    blb18_cop_solutions(D_ul, D_ll, x, y, 5);
     
     SMD5_leader(p, q, r, x, y, F);
     SMD5_follower(p, q, r, x, y, f);
@@ -100,7 +100,7 @@ int test(){
 
     if (Fv != 0){
         printf("Error\n");
-        exit(0);
+        // exit(0);
     }
 
     return 1;
@@ -110,18 +110,21 @@ int main(int argc, char const *argv[])
 {
     test();
     srand(time(NULL));
-    int i, id;
+    int i, j, id, settings[6];
+
  
     // population size
-    int N = 5;
+    int N = 2;
 
     // upper and lower level dimension
-    int D_upper = 10;
-    int D_lower = 10;
+    int D_ul = 5;
+    int D_ll = 5;
+    
+    // blb18_cop_settings(D_ul, D_ll, settings, fnum);
 
     // allocate vectors
-    double *x = array(N*D_upper);
-    double *y = array(N*D_lower);
+    double *x = array(N*D_ul);
+    double *y = array(N*D_ll);
 
     // upper level
     double *F = array(N);
@@ -129,20 +132,43 @@ int main(int argc, char const *argv[])
     double *f = array(N);
 
     // random initialization
-    randm(0, 1, x, N*D_upper);
-    randm(0, 1, y, N*D_lower);
+    randm(0, 1, x, N*D_ul);
+    randm(0, 1, y, N*D_ll);
 
+    int lenG = 0, leng = 0;
+    double *G, *g;
 
-    printf("Problem  i \t F \t \t f \n");
-    for (id = 1; id <= 8; ++id) {
+    printf("Problem  i \t F \t \t f  \n");
+    for (id = 1; id <= 12; ++id) {
+        
+        if (id > 8) {
+            // get settings
+            blb18_cop_settings(D_ul, D_ll, settings, id);
+
+            // free(G);
+            // free(g);
+
+            // numbre or restrictions
+            lenG = settings[4]; leng = settings[5];
+            G = array(lenG*N); g = array(leng*N);
+        }
+
         // evaluate
-        blb18_leader_cop(N, D_upper, D_lower, x, y, F, NULL, id);
-        blb18_follower_cop(N, D_upper, D_lower, x, y, f, NULL, id);
+        blb18_leader_cop(N, D_ul, D_ll, x, y, F, G, id);
+        blb18_follower_cop(N, D_ul, D_ll, x, y, f, g, id);
 
         for (i = 0; i < N; ++i) {
-            printf("%i \t %i \t %e \t %e\n", id, i+1, F[i], f[i] );
+            printf("%i \t %i \t %.2e \t %.2e \n", id, i+1, F[i], f[i] );
+
+            printf("  G = [");
+            for (j = 0; j < lenG; ++j) printf("%.2e, ", G[i*lenG + j]);
+            printf("]\n  g = [");
+            for (j = 0; j < leng; ++j) printf("%.2e, ", g[i*leng + j]);
+            printf("]\n");
+
         }
         printf("---------------------------------------------\n");
+
         
     }
 
