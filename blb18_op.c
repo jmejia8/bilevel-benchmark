@@ -763,6 +763,30 @@ void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, 
 
         ll1_a = -5.0; ll1_b = 10.0;
         ll2_a = -5.0; ll2_b = 10.0;
+    } else if (fnum == 9) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 1.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -1.0 + EPS; ll2_b = -1.0 + E;
+    } else if (fnum == 10) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -PI / 2.0 + EPS; ll2_b = PI / 2.0 - EPS;
+    } else if (fnum == 11) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -1.0; ul2_b = 1.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = 1.0/E; ll2_b = E;
+    } else if (fnum == 12) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -14.10; ul2_b = 14.10;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -1.5 + EPS; ll2_b = 1.5 - EPS;
     }
 
     for (i = 0; i < p; ++i) {
