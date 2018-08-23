@@ -799,12 +799,24 @@ void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
 
     if (fnum == 2 || fnum == 7){
         for (i = q; i < D_ll; ++i) y[i] = 1;
-    }
-
-
-    if (fnum == 5 || fnum == 8) {
+    
+    } else if (fnum == 5 || fnum == 8) {
         for (i = 0; i < D_ll; ++i) y[i] = 0;
         for (i = 0; i < q; ++i) y[i] = 1; 
+    
+    } else if (fnum == 10) {
+        for (i = 0; i < D_ul; ++i) x[i] = 1.0 / sqrt(p + r - 1);
+        for (i = 0; i < q; ++i) y[i] = 1.0 / sqrt(q-1);
+        for (i = 0; i < r; ++i) y[q+i] = atan(x[p + i]);
+    
+    } else if (fnum == 11) {
+        for (i = 0; i < r; ++i) y[q + i] = exp(-1.0 / sqrt(r));
+    
+    } else if (fnum == 12) {
+        for (i = 0; i < D_ul; ++i) x[i] = 1.0 / sqrt(p+r-1);
+        for (i = 0; i < q; ++i) y[i] = 1.0 / sqrt(q-1);
+        for (i = 0; i < r; ++i) y[q+i] = atan( (1.0 / sqrt(p+r-1)) - (1.0 / sqrt(r)));
+        
     }
 
 
