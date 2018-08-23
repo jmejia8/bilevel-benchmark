@@ -583,18 +583,18 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
     }
 }
 
-void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
+void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     int p, q, r, s;
 
-    r = D_upper / 2;
-    p = D_upper - r;
+    r = D_ul / 2;
+    p = D_ul - r;
     
     if (fnum == 6) {
-        q = (int) floor( (D_lower - r) / 2);
-        s = (int)  ceil( EPS + (D_lower - r) / 2);
+        q = (int) floor( (D_ll - r) / 2);
+        s = (int)  ceil( EPS + (D_ll - r) / 2);
     }else{
-        r = D_upper / 2;
-        q = D_lower - r;
+        r = D_ul / 2;
+        q = D_ll - r;
     }
 
     settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
@@ -611,17 +611,23 @@ void blb18_cop_settings(int D_upper, int D_lower, int *settings, int fnum){
     } else if (fnum == 12){
         settings[4] = 2*r + p;
         settings[5] = q+1;
+    }else{
+        settings[4] = 0;
+        settings[5] = 0;
     }
 }
 
-void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, double *F, double *G, int id){
-    int i, u, l, settings[4];
+void blb18_leader_cop(int N, int D_ul, int D_ll, double *x, double *y, double *F, double *G, int id){
+    int i, u, l, settings[6];
+
+    blb18_cop_settings(D_ul, D_ll, settings, id);
 
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+    int lenG = settings[4]; 
 
     for (i = 0; i < N; ++i) {
-        u = i*D_upper;
-        l = i*D_lower;
+        u = i*D_ul;
+        l = i*D_ll;
 
         switch(id) {
             case 1:
@@ -649,16 +655,16 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
                 SMD8_leader(p, q, r, &x[u], &y[l], &F[i]);
                 break;
             case 9:
-                SMD9_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                SMD9_leader(p, q, r, &x[u], &y[l], &F[i], &G[i*lenG]);
                 break;
             case 10:
-                SMD10_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                SMD10_leader(p, q, r, &x[u], &y[l], &F[i], &G[i*lenG]);
                 break;
             case 11:
-                SMD11_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                SMD11_leader(p, q, r, &x[u], &y[l], &F[i], &G[i*lenG]);
                 break;
             case 12:
-                SMD12_leader(p, q, r, &x[u], &y[l], &F[i], &G[i]);
+                SMD12_leader(p, q, r, &x[u], &y[l], &F[i], &G[i*lenG]);
                 break;
             default:
                 printf("Error: Invalid function id (1,2,...,12).\n");
@@ -667,14 +673,17 @@ void blb18_leader_cop(int N, int D_upper, int D_lower, double *x, double *y, dou
     }
 }
 
-void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, double *f, double *g, int id){
-    int i, u, l, settings[4];
+void blb18_follower_cop(int N, int D_ul, int D_ll, double *x, double *y, double *f, double *g, int id){
+    int i, u, l, settings[6];
+
+    blb18_cop_settings(D_ul, D_ll, settings, id);
 
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+    int leng = settings[5];
 
     for (i = 0; i < N; ++i) {
-        u = i*D_upper;
-        l = i*D_lower;
+        u = i*D_ul;
+        l = i*D_ll;
 
         switch(id) {
             case 1:
@@ -702,16 +711,16 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
                 SMD8_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 9:
-                SMD9_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                SMD9_follower(p, q, r, &x[u], &y[l], &f[i], &g[i*leng]);
                 break;
             case 10:
-                SMD10_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                SMD10_follower(p, q, r, &x[u], &y[l], &f[i], &g[i*leng]);
                 break;
             case 11:
-                SMD11_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                SMD11_follower(p, q, r, &x[u], &y[l], &f[i], &g[i*leng]);
                 break;
             case 12:
-                SMD12_follower(p, q, r, &x[u], &y[l], &f[i], &g[i]);
+                SMD12_follower(p, q, r, &x[u], &y[l], &f[i], &g[i*leng]);
                 break;
             default:
                 printf("Error: Invalid function id (1,2,...,12).\n");
@@ -720,10 +729,10 @@ void blb18_follower_cop(int N, int D_upper, int D_lower, double *x, double *y, d
     }
 }
 
-void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bounds_ll, int fnum){
+void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnum){
     int settings[6];
 
-    blb18_cop_settings(D_upper, D_lower, settings, fnum);
+    blb18_cop_settings(D_ul, D_ll, settings, fnum);
     
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
@@ -758,43 +767,43 @@ void blb18_cop_ranges(int D_upper, int D_lower, double *bounds_ul, double *bound
 
     for (i = 0; i < p; ++i) {
         bounds_ul[i] = ul1_a;
-        bounds_ul[D_upper + i] = ul1_b;
+        bounds_ul[D_ul + i] = ul1_b;
     }
     
     for (i = p; i < p + r; ++i){
         bounds_ul[i] = ul2_a;
-        bounds_ul[D_upper + i] = ul2_b;
+        bounds_ul[D_ul + i] = ul2_b;
     }
 
     for (i = 0; i < q; ++i){
         bounds_ll[i] = ll1_a;
-        bounds_ll[D_upper + i] = ll1_b;
+        bounds_ll[D_ul + i] = ll1_b;
     }
 
     for (i = q; i < q+r+s; ++i){
         bounds_ll[i] = ll2_a;
-        bounds_ll[D_upper + i] = ll2_b;
+        bounds_ll[D_ul + i] = ll2_b;
     }
 
 
 }
 
-void blb18_cop_solutions(int D_upper, int D_lower, double *x, double *y, int fnum){
+void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
 
     int settings[6], i;
-    blb18_cop_settings(D_upper, D_lower, settings, fnum);
+    blb18_cop_settings(D_ul, D_ll, settings, fnum);
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
-    for (i = 0; i < D_upper; ++i)x[i] = 0;
-    for (i = 0; i < D_lower; ++i) y[i] = 0;
+    for (i = 0; i < D_ul; ++i)x[i] = 0;
+    for (i = 0; i < D_ll; ++i) y[i] = 0;
 
     if (fnum == 2 || fnum == 7){
-        for (i = q; i < D_lower; ++i) y[i] = 1;
+        for (i = q; i < D_ll; ++i) y[i] = 1;
     }
 
 
     if (fnum == 5 || fnum == 8) {
-        for (i = 0; i < D_lower; ++i) y[i] = 0;
+        for (i = 0; i < D_ll; ++i) y[i] = 0;
         for (i = 0; i < q; ++i) y[i] = 1; 
     }
 
