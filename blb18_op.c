@@ -591,7 +591,7 @@ void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     
     if (fnum == 6) {
         q = (int) floor( (D_ll - r) / 2);
-        s = (int)  ceil( EPS + (D_ll - r) / 2);
+        s = (int)  ceil( EPS + (double) (D_ll - r) / (double) 2.0);
     }else{
         r = D_ul / 2;
         q = D_ll - r;
@@ -702,7 +702,7 @@ void blb18_follower_cop(int N, int D_ul, int D_ll, double *x, double *y, double 
                 SMD5_follower(p, q, r, &x[u], &y[l], &f[i]);
                 break;
             case 6:
-                SMD6_follower(p, q, r, q, &x[u], &y[l], &f[i]);
+                SMD6_follower(p, q, r, s, &x[u], &y[l], &f[i]);
                 break;
             case 7:
                 SMD7_follower(p, q, r, &x[u], &y[l], &f[i]);
