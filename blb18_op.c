@@ -12,6 +12,7 @@
 #define PI 3.1415926535897932384626433832795029
 
 #include "smd.c"
+#include "pmm.c"
 
 void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     int p, q, r, s;
