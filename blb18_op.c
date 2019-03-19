@@ -236,8 +236,6 @@ void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, 
         bounds_ll[i] = ll2_a;
         bounds_ll[D_ul + i] = ll2_b;
     }
-
-
 }
 
 void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
@@ -270,6 +268,52 @@ void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
         for (i = 0; i < r; ++i) y[q+i] = atan( (1.0 / sqrt(p+r-1)) - (1.0 / sqrt(r)));
         
     }
+}
 
+void PT_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
+    if ( fnum == 1 ) {
+        TP1_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 2) {
+        TP2_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 3) {
+        TP3_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 4) {
+        TP4_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 5) {
+        TP5_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 6) {
+        TP6_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 7) {
+        TP7_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 8) {
+        TP8_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 9) {
+        TP9_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 10) {
+        TP10_leader(D_ul, D_ll, x, y, F);
+    }
+}
 
+void TP_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g, int fnum){
+    if ( fnum == 1 ) {
+        TP1_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 2) {
+        TP2_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 3) {
+        TP3_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 4) {
+        TP4_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 5) {
+        TP5_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 6) {
+        TP6_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 7) {
+        TP7_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 8) {
+        TP8_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 9) {
+        TP9_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 10) {
+        TP10_follower(D_ul, D_ll, x, y, f);
+    }
 }
