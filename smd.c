@@ -433,7 +433,7 @@ void SMD10_follower(int p, int q, int r, double *x, double *y, double *f, double
     for (i = 0; i < q; ++i) { xl1_3[i] = pow(x_l1[i], 3); }
 
     double sum_xl1_3 = 0.0;
-    for (i = 0; i < p; ++i) { sum_xl1_3 += xl1_3[i]; }
+    for (i = 0; i < q; ++i) { sum_xl1_3 += xl1_3[i]; }
 
 
     for (i = 0; i < q; ++i) {
@@ -555,12 +555,12 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
 
     f[0] = f1 + f2 + f3;
 
-    double xl1_3[p];
+    double xl1_3[q];
 
     for (i = 0; i < q; ++i) { xl1_3[i] = pow(x_l1[i], 3); }
 
     double sum_xl1_3 = 0.0;
-    for (i = 0; i < p; ++i) { sum_xl1_3 += xl1_3[i]; }
+    for (i = 0; i < q; ++i) { sum_xl1_3 += xl1_3[i]; }
 
 
     g[0] = f3-1.0;
