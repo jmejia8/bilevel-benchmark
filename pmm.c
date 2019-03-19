@@ -1,3 +1,5 @@
+#include "constants.h"
+
 void PMM1_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
@@ -323,7 +325,7 @@ void PMM8_leader(int m, int n, double *x, double *y, double *F, double *G){
     ///// Constraints
     ////////////////////////////////////////////////////////////////////////////
     G[0] = 0.0;
-    double min = fabs(x[0]);
+
     for (int i = 0; i < n; ++i) {
         G[0] += pow(y[i], 2) + 100*cos(2*PI*x[i]);
     }
