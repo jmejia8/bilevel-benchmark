@@ -270,7 +270,7 @@ void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
     }
 }
 
-void PT_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
+void TP_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
     if ( fnum == 1 ) {
         TP1_leader(D_ul, D_ll, x, y, F, G);
     }else if (fnum == 2) {
