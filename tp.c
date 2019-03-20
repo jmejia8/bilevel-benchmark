@@ -110,12 +110,18 @@ void TP_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnu
 
         bounds_ll[0] = -10.0;  bounds_ll[2] = 20.0;
         bounds_ll[1] = -10.0;  bounds_ll[3] = 20.0;
-    }else if (fnum == 9 || fnum == 10) {
-        bounds_ul[0] = -1.0; bounds_ul[2] = 1.0;
-        bounds_ul[1] = -1.0; bounds_ul[3] = 1.0;
-
-        bounds_ll[0] = -PI;  bounds_ll[2] = PI;
-        bounds_ll[1] = -PI;  bounds_ll[3] = PI;
+    }else if (fnum == 9 ) {
+        int i;
+        for (i = 0; i < 5; ++i) {
+            bounds_ul[i] = -1.0; bounds_ul[5 + i] = 1.0;
+            bounds_ll[i] = -PI;  bounds_ll[5 + i] = PI;
+        }
+    } else if (fnum == 10) {
+        int i;
+        for (i = 0; i < 10; ++i) {
+            bounds_ul[i] = -1.0; bounds_ul[10 + i] = 1.0;
+            bounds_ll[i] = -PI;  bounds_ll[10 + i] = PI;
+        }
     }
 }
 
@@ -455,3 +461,5 @@ void TP10_follower(int nx, int ny, double *x, double *y, double *f){
     
     f[0] = exp(exponent);
 }
+
+
