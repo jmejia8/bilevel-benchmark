@@ -9,7 +9,7 @@
 
 #include "smd.c"
 #include "pmm.c"
-#include "pt.c"
+#include "tp.c"
 
 void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     int p, q, r, s;
