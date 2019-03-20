@@ -20,6 +20,48 @@ void TP_config(int nx, int ny, int fnum, int *settings){
     }
 }
 
+void TP_solutions(int nx, int ny, double *x, double *y, int fnum){
+    if (fnum == 1)
+        x[0]=20; x[1]=5; y[0]=10; y[1]=5; // fu=-225
+    else if (fnum == 2)
+        x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
+    else if (fnum == 3)
+        x[0]=0; x[1]=2; y[0]=1.8750; y[1]=0.9062; // fu=18.6787; // fl=1.0156
+    else if (fnum == 4)
+        x[0]=0.29; x[1]=0.70; y[0]=0; y[1]=0.27; y[2]=0.27; // fu=29.2; // fl=-3.2
+    else if (fnum == 5)
+        x[0]=2; x[1]=0; y[0]=2; y[1]=0; // fu=3.6; // fl=2
+    else if (fnum == 6)
+        x[0]=1.888; y[0]=0.888; y[1]=0; // fu=1.2098; // fl=-7.61
+    else if (fnum == 7)
+        x[0]=5.24; x[1]=5.63; y[0]=5.24; y[1]=0; y[2]=0.27; // fu=2.0714; // fl=-2.0714
+    else if (fnum == 8)
+        x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
+    else if (fnum == 9 || fnum == 10)
+        x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
+    
+}
+
+void TP_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnum){
+    int settings[6];
+
+    blb18_cop_settings(D_ul, D_ll, settings, fnum);
+    
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+
+
+    int i;
+    double ul1_a, ul1_b, ul2_a, ul2_b, ll1_a, ll1_b, ll2_a, ll2_b;
+    if (fnum == 1){
+        ul1_a =  -30.0; ul1_b = 30.0;
+        ul2_a = -30.0; ul2_b = 15.0;
+
+        ll1_a = 0.0;  ll1_b = 10.0;
+        ll2_a = 0.0;  ll2_b = 10.0;
+    }
+}
+
+
 void TP1_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double x1 = x[0];
     double x2 = x[1];
