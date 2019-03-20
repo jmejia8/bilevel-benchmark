@@ -263,7 +263,7 @@ void TP5_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     // x = [x1 x2]';
     // y = [y1 y2]';
     
-    // f[0] = 0.5*y'*H*y + (b*x)'*y;
+    f[0] =  y1 * (- x1 + 2*x2) + y1 * (0.5*y1 + 1.5*y2) + y2 * (3*x1 - 3*x2) + y2 * (1.5*y1 + 5.0*y2);
 
 
     //////////////////////////
