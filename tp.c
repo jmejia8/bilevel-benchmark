@@ -1,22 +1,44 @@
 #include "constants.h"
 
-void TP_config(int nx, int ny, int fnum, int *settings){
-    if (fnum == 1 || fnum == 5) {
+void TP_config(int *settings, int fnum){
+    if (fnum <= 8) {
         settings[0] = 2;
-    }else if (fnum == 2 || fnum == 3 || fnum == 4 || fnum == 8) {
-        settings[0] = 3;
+    }else if (fnum == 9) {
+        settings[0] = 5;
+    }else if (fnum == 10) {
+        settings[0] = 10;
     }else{
         settings[0] = 0;
     }
 
-    if (fnum == 2 || fnum == 3 || fnum == 5 || fnum == 7 || fnum == 8) {
-        settings[1] = 2;
-    }else if (fnum == 4) {
+    if (fnum == 4) {
         settings[1] = 3;
-    }else if (fnum == 6) {
-        settings[1] = 4;
+    }else if (fnum <= 8) {
+        settings[1] = 2;
+    }else if (fnum == 9) {
+        settings[1] = 5;
+    }else if (fnum == 10) {
+        settings[1] = 10;
     }else{
         settings[1] = 0;
+    }
+
+    if (fnum == 1 || fnum == 5) {
+        settings[2] = 2;
+    }else if (fnum == 2 || fnum == 3 || fnum == 4 || fnum == 8) {
+        settings[2] = 3;
+    }else{
+        settings[2] = 0;
+    }
+
+    if (fnum == 2 || fnum == 3 || fnum == 5 || fnum == 7 || fnum == 8) {
+        settings[3] = 2;
+    }else if (fnum == 4) {
+        settings[3] = 3;
+    }else if (fnum == 6) {
+        settings[3] = 4;
+    }else{
+        settings[3] = 0;
     }
 }
 
