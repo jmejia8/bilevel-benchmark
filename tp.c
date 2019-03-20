@@ -1,5 +1,25 @@
 #include "constants.h"
 
+void TP_config(int nx, int ny, int fnum, int *settings){
+    if (fnum == 1 || fnum == 5) {
+        settings[0] = 2;
+    }else if (fnum == 2 || fnum == 3 || fnum == 4 || fnum == 8) {
+        settings[0] = 3;
+    }else{
+        settings[0] = 0;
+    }
+
+    if (fnum == 2 || fnum == 3 || fnum == 5 || fnum == 7 || fnum == 8) {
+        settings[1] = 2;
+    }else if (fnum == 4) {
+        settings[1] = 3;
+    }else if (fnum == 6) {
+        settings[1] = 4;
+    }else{
+        settings[1] = 0;
+    }
+}
+
 void TP1_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double x1 = x[0];
     double x2 = x[1];
