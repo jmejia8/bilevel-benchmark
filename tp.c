@@ -7,6 +7,8 @@ void TP_config(int *settings, int fnum){
         settings[0] = 5;
     }else if (fnum == 10) {
         settings[0] = 10;
+    }else if (fnum == 6) {
+        settings[0] = 1;
     }else{
         settings[0] = 0;
     }
@@ -27,6 +29,8 @@ void TP_config(int *settings, int fnum){
         settings[2] = 2;
     }else if (fnum == 2 || fnum == 3 || fnum == 4 || fnum == 8) {
         settings[2] = 3;
+    }else if (fnum == 7 || fnum == 6) {
+        settings[2] = 4;
     }else{
         settings[2] = 0;
     }
@@ -56,7 +60,7 @@ void TP_solutions(int nx, int ny, double *x, double *y, int fnum){
     } else if (fnum == 6){
         x[0]=1.888; y[0]=0.888; y[1]=0; // fu=1.2098; // fl=-7.61
     } else if (fnum == 7) {
-        x[0]=5.24; x[1]=5.63; y[0]=5.24; y[1]=0; y[2]=0.27; // fu=2.0714; // fl=-2.0714
+        x[0]=5.24; x[1]=5.63; y[0]=5.24; y[1]=0; //y[2]=0.27; // fu=2.0714; // fl=-2.0714
     } else if (fnum == 8){
         x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
     } else if (fnum == 9 || fnum == 10) {
