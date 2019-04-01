@@ -18,11 +18,12 @@ void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     p = D_ul - r;
     
     if (fnum == 6) {
-        q = (int) floor( (D_ll - r) / 2);
+        q = (int) floor( (D_ll - r) / 2  - EPS);
         s = (int)  ceil( EPS + (double) (D_ll - r) / (double) 2.0);
     }else{
         r = D_ul / 2;
         q = D_ll - r;
+        s = 0;
     }
 
     settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
@@ -227,12 +228,12 @@ void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, 
         bounds_ul[D_ul + i] = ul2_b;
     }
 
-    for (i = 0; i < q; ++i){
+    for (i = 0; i < q+s; ++i){
         bounds_ll[i] = ll1_a;
         bounds_ll[D_ul + i] = ll1_b;
     }
 
-    for (i = q; i < q+r+s; ++i){
+    for (i = q+s; i < q+r+s; ++i){
         bounds_ll[i] = ll2_a;
         bounds_ll[D_ul + i] = ll2_b;
     }
