@@ -230,12 +230,12 @@ void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, 
 
     for (i = 0; i < q+s; ++i){
         bounds_ll[i] = ll1_a;
-        bounds_ll[D_ul + i] = ll1_b;
+        bounds_ll[D_ll + i] = ll1_b;
     }
 
     for (i = q+s; i < q+r+s; ++i){
         bounds_ll[i] = ll2_a;
-        bounds_ll[D_ul + i] = ll2_b;
+        bounds_ll[D_ll + i] = ll2_b;
     }
 }
 
