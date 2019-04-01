@@ -18,7 +18,7 @@ void blb18_cop_settings(int D_ul, int D_ll, int *settings, int fnum){
     p = D_ul - r;
     
     if (fnum == 6) {
-        q = (int) floor( (D_ll - r) / 2  - EPS);
+        q = (int) floor( - EPS + (D_ll - r) /  (double) 2.0 );
         s = (int)  ceil( EPS + (double) (D_ll - r) / (double) 2.0);
     }else{
         r = D_ul / 2;
