@@ -571,7 +571,7 @@ void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g
     }
 }
 
-double PMM_test(int m, int n){
+double PMM_test1(int m, int n){
     int FNUN = 10, fnum;
 
     double *x = array(n);
@@ -581,14 +581,42 @@ double PMM_test(int m, int n){
     int settings[2];
 
     PMM_config(settings, fnum);
-    randm(0, 1, x, 1*n);
-    randm(0, 1, y, 1*n);
+    randm(-1.0, 1, x, 1*n);
+    randm(-1, 1.0, y, 1*n);
 
-    for (fnum = 0; fnum < FNUN; ++fnum){
-        PMM_leader(n, n, x, y, F, G, fnum);
-        PMM_follower(n, n, x, y, f, g, fnum);
+    for (fnum = 1; fnum <= FNUN; ++fnum){
+        PMM_leader(m, n, x, y, F,G, fnum);
+        PMM_follower(m, n, x, y, f, g, fnum);
 
+        f_sum += fabs( F[0] + f[0] );
         printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
     } 
-    return 1;
+    return f_sum;
+}
+
+double PMM_test(int m, int n){
+    int FNUN = 10, fnum, i;
+
+    double *x = array(n);
+    double *y = array(n);
+    double F[1], f[1], f_sum = 0;
+    double G[2], g[2];
+    int settings[2];
+
+    PMM_config(settings, fnum);
+    
+
+    printf("\n");
+
+    for (fnum = 1; fnum <= FNUN; ++fnum){
+        randm(-1.0, 1, x, 1*n);
+        PMM_Psi(m, n, x, y, fnum);
+
+        PMM_leader(m, n, x, y, F,G, fnum);
+        PMM_follower(m, n, x, y, f, g, fnum);
+
+        f_sum += fabs( F[0] + f[0] );
+        printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+    } 
+    return f_sum;
 }
