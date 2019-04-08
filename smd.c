@@ -6,6 +6,89 @@
 // x_u = x = (x_u1 , x_u2 )
 // x_l = y = (x_l1 , x_l2 )
 
+void SMD_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnum){
+    int settings[6];
+
+    blb18_cop_settings(D_ul, D_ll, settings, fnum);
+    
+    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
+
+
+    int i;
+    double ul1_a, ul1_b, ul2_a, ul2_b, ll1_a, ll1_b, ll2_a, ll2_b;
+    if (fnum == 1 || fnum == 3){
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a = -PI/2 + EPS; ll2_b = PI/2 - EPS;
+    } else if (fnum == 2 || fnum == 7){
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 1.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a =  EPS; ll2_b = E ;   
+    } else if (fnum == 4){   
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -1.0; ul2_b = 1.0;
+
+        ll1_a = -5.0;  ll1_b = 10.0;
+        ll2_a =  0; ll2_b = E ;
+    } else if (fnum == 5  || fnum == 6 || fnum == 8){   
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -5.0; ll2_b = 10.0;
+    } else if (fnum == 9) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 1.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -1.0 + EPS; ll2_b = -1.0 + E;
+    } else if (fnum == 10) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -5.0; ul2_b = 10.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -PI / 2.0 + EPS; ll2_b = PI / 2.0 - EPS;
+    } else if (fnum == 11) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -1.0; ul2_b = 1.0;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = 1.0/E; ll2_b = E;
+    } else if (fnum == 12) {
+        ul1_a = -5.0; ul1_b = 10.0;
+        ul2_a = -14.10; ul2_b = 14.10;
+
+        ll1_a = -5.0; ll1_b = 10.0;
+        ll2_a = -1.5 + EPS; ll2_b = 1.5 - EPS;
+    }
+
+    for (i = 0; i < p; ++i) {
+        bounds_ul[i] = ul1_a;
+        bounds_ul[D_ul + i] = ul1_b;
+    }
+    
+    for (i = p; i < p + r; ++i){
+        bounds_ul[i] = ul2_a;
+        bounds_ul[D_ul + i] = ul2_b;
+    }
+
+    for (i = 0; i < q+s; ++i){
+        bounds_ll[i] = ll1_a;
+        bounds_ll[D_ll + i] = ll1_b;
+    }
+
+    for (i = q+s; i < q+r+s; ++i){
+        bounds_ll[i] = ll2_a;
+        bounds_ll[D_ll + i] = ll2_b;
+    }
+}
+
+
+
 double sphere(double *x, int D){
     int i; double f = 0.0;
 

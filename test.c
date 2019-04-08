@@ -3,18 +3,6 @@
 
 #include "blb18_op.c"
 
-void randm(double a, double b, double *x, int D){
-    int i;
-    for (i = 0; i < D; ++i) {
-        x[i] = a + (double) (rand() / (double) (RAND_MAX) * (b - a));
-    }
-}
-
-
-double* array(int D){
-    return (double *) malloc(D * sizeof( double ));
-}
-
 int test(){
     int settings[6];
     int D_ul = 5,  D_ll = 5;
@@ -71,7 +59,9 @@ int test(){
 }
 
 int main(int argc, char const *argv[])
-{
+{  
+    PMM_test(5, 10);
+    return 0;
     test();
     srand(time(NULL));
     int i, j, id, settings[6];

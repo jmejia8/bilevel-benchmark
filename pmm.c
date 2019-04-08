@@ -1,5 +1,25 @@
 #include "constants.h"
 
+void PMM_config(int *settings, int fnum){
+    if ( 6 <= fnum && fnum <= 8) {
+        settings[0] = 1; settings[1] = 1;
+    }else if (fnum == 9 || fnum == 10) {
+        settings[0] = 2; settings[1] = 2;
+    }else{
+        settings[0] = 0; settings[1] = 0;
+    }
+}
+
+void PMM_Psi(int m, int n, double *x, double *y, int fnum){
+    int i = 1;
+
+    if (fnum == 2 || fnum == 7){
+       for (i = 0; i < n; ++i) { y[i] = i < m ? pow(x[i], 3) : 0.0; }
+    }else if (1 <= fnum && fnum <= 10) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? x[i] : 0.0; }
+    }
+}
+
 void PMM1_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
@@ -501,4 +521,74 @@ void PMM10_follower(int m, int n, double *x, double *y, double *f, double *g){
 
     g[0] -= min;
     ////////////////////////////////////////////////////////////////////////////
+}
+
+void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
+    if ( fnum == 1 ) {
+        PMM1_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 2) {
+        PMM2_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 3) {
+        PMM3_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 4) {
+        PMM4_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 5) {
+        PMM5_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 6) {
+        PMM6_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 7) {
+        PMM7_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 8) {
+        PMM8_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 9) {
+        PMM9_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 10) {
+        PMM10_leader(D_ul, D_ll, x, y, F, G);
+    }
+}
+
+void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g, int fnum){
+    if ( fnum == 1 ) {
+        PMM1_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 2) {
+        PMM2_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 3) {
+        PMM3_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 4) {
+        PMM4_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 5) {
+        PMM5_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 6) {
+        PMM6_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 7) {
+        PMM7_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 8) {
+        PMM8_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 9) {
+        PMM9_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 10) {
+        PMM10_follower(D_ul, D_ll, x, y, f, g);
+    }
+}
+
+double PMM_test(int m, int n){
+    int FNUN = 10, fnum;
+
+    double *x = array(n);
+    double *y = array(n);
+    double F[1], f[1], f_sum = 0;
+    double G[2], g[2];
+    int settings[2];
+
+    PMM_config(settings, fnum);
+    randm(0, 1, x, 1*n);
+    randm(0, 1, y, 1*n);
+
+    for (fnum = 0; fnum < FNUN; ++fnum){
+        PMM_leader(n, n, x, y, F, G, fnum);
+        PMM_follower(n, n, x, y, f, g, fnum);
+
+        printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+    } 
+    return 1;
 }

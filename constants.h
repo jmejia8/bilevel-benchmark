@@ -1,4 +1,15 @@
+// #include <WINDOWS.H>
+#include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+// #include <iostream>
+// using namespace std;
+
+#include <math.h>
+
+#ifndef PI
+    #include "utils.c"
+#endif
 
 #define INF 1.0e99
 #define EPS 1.0e-14

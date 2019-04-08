@@ -1,12 +1,3 @@
-// #include <WINDOWS.H>
-#include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-// #include <iostream>
-// using namespace std;
-
-
-
 #include "smd.c"
 #include "pmm.c"
 #include "tp.c"
