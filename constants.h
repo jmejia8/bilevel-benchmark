@@ -1,6 +1,8 @@
 // #include <WINDOWS.H>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <time.h>
 // #include <iostream>
 // using namespace std;
 

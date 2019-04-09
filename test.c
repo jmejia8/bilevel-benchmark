@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <time.h>
-
 #include "blb18_op.c"
 
 int test(){
@@ -62,7 +59,6 @@ int main(int argc, char const *argv[])
 {  
     srand(time(NULL));
     PMM_test(5, 10);
-    return 0;
     test();
     int i, j, id, settings[6];
 
