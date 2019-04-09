@@ -157,7 +157,7 @@ void PMM4_follower(int m, int n, double *x, double *y, double *f){
     Q = (double) 10*m;
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(x[i] - y[i], 2) + 10*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
@@ -181,7 +181,7 @@ void PMM5_leader(int m, int n, double *x, double *y, double *F){
 
     P = 10*q + (double) 10.0*(n-m);
     for (i = m; i < n; ++i){
-        P += pow(x[i], 2) + 10*cos(2*PI*x[i]);
+        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);
     }
 
     F[0] = P - q*Q;
@@ -190,13 +190,13 @@ void PMM5_leader(int m, int n, double *x, double *y, double *F){
 void PMM5_follower(int m, int n, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, o;
 
-    q += pow(x[m], 2);
+    q += pow(x[m-1], 2);
     for (i = 0; i < m-1; ++i) {
         q += pow(x[i], 2);
-        double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
+        o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
+        Q += (pow(sin( sqrt(o) ), 2)) / pow(1.0 + 0.001*(o) , 2);
     }
 
     for (i = m; i < n; ++i){
@@ -425,7 +425,7 @@ void PMM9_follower(int m, int n, double *x, double *y, double *f, double *g){
     q += fabs(x[m]);
     for (i = 0; i < m; ++i) {
         double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (i < m-1) ? (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2) : 0;
+        Q += (i < m-1) ? (pow(sin( sqrt(o) ), 2) ) / pow(1.0 + 0.001*(o) , 2) : 0;
         
         for (j = m; j < i; ++j) {
             p += pow(y[j], 2);        
@@ -457,20 +457,18 @@ void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
 
     double P = 0.0, q  = 0.0, Q  = 0.0;
 
-    P = (double) 10.0*n + pow(x[m], 2) + 100*cos(2*PI*x[m]);;
-    q += pow(x[m], 2) + floor(fabs(x[m]));
-    for (i = 0; i < m-1; ++i) {
-        P += pow(x[i], 2) + 10*cos(2*PI*x[i]);;
-        q += pow(x[m], 2) + floor(fabs(x[m]));
-        double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
+    for (i = 0; i < m; ++i) {
+        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);;
+        q += pow(x[i], 2) / 10.0 + floor(fabs(x[i]));
+        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
     }
 
-    P = 10*q + (double) 10.0*(n-m);
     for (i = m; i < n; ++i){
-        P += pow(x[i], 2) + 10*cos(2*PI*x[i]);
+        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);
     }
 
+    P += 10*n;
+    
     F[0] = P - q*Q;
 
     ////////////////////////////////////////////////////////////////////////////
@@ -492,13 +490,13 @@ void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
 void PMM10_follower(int m, int n, double *x, double *y, double *f, double *g){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 10.0*m;
 
     q += pow(x[m], 2) + floor(fabs(x[m]));
-    for (i = 0; i < m-1; ++i) {
+    for (i = 0; i < m; ++i) {
         q += pow(x[m], 2) + floor(fabs(x[m]));
-        double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
+        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        
     }
 
     for (i = m; i < n; ++i){
@@ -589,12 +587,12 @@ double PMM_test1(int m, int n){
         PMM_follower(m, n, x, y, f, g, fnum);
 
         f_sum += fabs( F[0] + f[0] );
-        printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
     } 
     return f_sum;
 }
 
-double PMM_test(int m, int n){
+double PMM_test2(int m, int n){
     int FNUN = 10, fnum, i;
 
     double *x = array(n);
@@ -604,9 +602,6 @@ double PMM_test(int m, int n){
     int settings[2];
 
     PMM_config(settings, fnum);
-    
-
-    printf("\n");
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
         randm(-1.0, 1, x, 1*n);
@@ -616,7 +611,31 @@ double PMM_test(int m, int n){
         PMM_follower(m, n, x, y, f, g, fnum);
 
         f_sum += fabs( F[0] + f[0] );
-        printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
-    } 
+        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+    }
+
+    // printf("--------------------------\n");
+
+    for (i = 0; i < n; ++i) {
+        x[i] = 0; y[i] = 0.0;
+    }
+
+    for (fnum = 1; fnum <= FNUN; ++fnum){
+
+        PMM_leader(m, n, x, y, F,G, fnum);
+        PMM_follower(m, n, x, y, f, g, fnum);
+
+        f_sum += fabs( F[0] + f[0] );
+        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+    }
+
+
     return f_sum;
 }
+
+double PMM_test(int m, int n){
+    double a = PMM_test1(m, n);
+    a += PMM_test2(m, n);
+    return a;
+}
+

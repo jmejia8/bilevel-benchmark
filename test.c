@@ -60,10 +60,10 @@ int test(){
 
 int main(int argc, char const *argv[])
 {  
+    srand(time(NULL));
     PMM_test(5, 10);
     return 0;
     test();
-    srand(time(NULL));
     int i, j, id, settings[6];
 
  
