@@ -576,9 +576,7 @@ double PMM_test1(int m, int n){
     double *y = array(n);
     double F[1], f[1], f_sum = 0;
     double G[2], g[2];
-    int settings[2];
 
-    PMM_config(settings, fnum);
     randm(-1.0, 1, x, 1*n);
     randm(-1, 1.0, y, 1*n);
 
@@ -599,9 +597,7 @@ double PMM_test2(int m, int n){
     double *y = array(n);
     double F[1], f[1], f_sum = 0;
     double G[2], g[2];
-    int settings[2];
 
-    PMM_config(settings, fnum);
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
         randm(-1.0, 1, x, 1*n);

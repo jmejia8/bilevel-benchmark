@@ -6,10 +6,46 @@
 // x_u = x = (x_u1 , x_u2 )
 // x_l = y = (x_l1 , x_l2 )
 
+void SMD_settings(int D_ul, int D_ll, int *settings, int fnum){
+    int p, q, r, s;
+
+    r = D_ul / 2;
+    p = D_ul - r;
+    
+    if (fnum == 6) {
+        q = (int) floor( - EPS + (D_ll - r) /  (double) 2.0 );
+        s = (int)  ceil( EPS + (double) (D_ll - r) / (double) 2.0);
+    }else{
+        r = D_ul / 2;
+        q = D_ll - r;
+        s = 0;
+    }
+
+    settings[0] = p; settings[1] = q; settings[2] = r; settings[3] = s;
+
+    if (fnum == 9){   
+        settings[4] = 1;
+        settings[5] = 1;
+    } else if (fnum == 10){
+        settings[4] = p+r;
+        settings[5] = q;
+    } else if (fnum == 11){
+        settings[4] = r;
+        settings[5] = 1;
+    } else if (fnum == 12){
+        settings[4] = 2*r + p;
+        settings[5] = q+1;
+    }else{
+        settings[4] = 0;
+        settings[5] = 0;
+    }
+}
+
+
 void SMD_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnum){
     int settings[6];
 
-    blb18_cop_settings(D_ul, D_ll, settings, fnum);
+    SMD_settings(D_ul, D_ll, settings, fnum);
     
     int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
 
@@ -64,6 +100,9 @@ void SMD_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fn
 
         ll1_a = -5.0; ll1_b = 10.0;
         ll2_a = -1.5 + EPS; ll2_b = 1.5 - EPS;
+    }else{
+        ul1_a = 0.0; ul1_b = 0.0; ul2_a = 0.0; ul2_b = 0.0; ll1_a = 0.0;
+        ll1_b = 0.0; ll2_a = 0.0; ll2_b=0.0;
     }
 
     for (i = 0; i < p; ++i) {
