@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 void randm(double a, double b, double *x, int D){
     int i;
     for (i = 0; i < D; ++i) {
