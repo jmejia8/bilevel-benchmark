@@ -172,14 +172,14 @@ void PMM5_leader(int m, int n, double *x, double *y, double *F){
 
     double P = 0.0, q  = 0.0, Q  = 0.0;
 
-    q += pow(x[m], 2);
+    q += pow(x[m-1], 2);
     for (i = 0; i < m-1; ++i) {
         q += pow(x[i], 2);
         double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
         Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
     }
 
-    P = 10*q + (double) 10.0*(n-m);
+    P = 10.0*q + (double) 10.0*(n-m);
     for (i = m; i < n; ++i){
         P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);
     }
