@@ -137,7 +137,7 @@ void PMM4_leader(int m, int n, double *x, double *y, double *F){
     Q = (double) 10*m;
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(x[i] - y[i], 2) + 10*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
