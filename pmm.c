@@ -181,7 +181,7 @@ void PMM5_leader(int m, int n, double *x, double *y, double *F){
 
     P = 10*q + (double) 10.0*(n-m);
     for (i = m; i < n; ++i){
-        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);
+        P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);
     }
 
     F[0] = P - q*Q;
@@ -366,7 +366,7 @@ void PMM8_follower(int m, int n, double *x, double *y, double *f, double *g){
 
     p = (double) 10.0*(n-m);
     for (i = m; i < n; ++i){
-        p += pow(y[i], 2) - 10*cos(2*PI*y[i]);
+        p += pow(y[i], 2) - 10.0*cos(2*PI*y[i]);
     }
 
     f[0] = p + q*Q;
@@ -458,13 +458,13 @@ void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
     double P = 0.0, q  = 0.0, Q  = 0.0;
 
     for (i = 0; i < m; ++i) {
-        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);;
+        P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);;
         q += pow(x[i], 2) / 10.0 + floor(fabs(x[i]));
         Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
-        P += pow(x[i], 2) - 10*cos(2*PI*x[i]);
+        P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);
     }
 
     P += 10*n;
