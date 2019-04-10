@@ -176,7 +176,7 @@ void PMM5_leader(int m, int n, double *x, double *y, double *F){
     for (i = 0; i < m-1; ++i) {
         q += pow(x[i], 2);
         double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
+        Q += (pow(sin( sqrt(o) ), 2)) / pow(1.0 + 0.001*(o) , 2);
     }
 
     P = 10.0*q + (double) 10.0*(n-m);
@@ -392,7 +392,7 @@ void PMM9_leader(int m, int n, double *x, double *y, double *F, double *G){
         P += pow(x[i], 2);
         q += fabs(x[m]);
         double o = pow(x[i]-y[i], 2) + pow(x[i+1]-y[i+1], 2);
-        Q += (pow(sin( sqrt(o) ), 2) - 0.5) / pow(1.0 + 0.001*(o) , 2);
+        Q += (pow(sin( sqrt(o) ), 2) ) / pow(1.0 + 0.001*(o) , 2);
     }
 
     q *= 100;
