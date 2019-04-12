@@ -6,7 +6,7 @@ endif
 USEGCC = 1
 USECLANG = 0
 
-CFLAGS-add += -Wall -lm -Ofast -shared
+CFLAGS-add += -Wall -lm -O2 -shared
 
 ifeq ($(USECLANG),1)
 USEGCC = 0
