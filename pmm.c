@@ -23,13 +23,14 @@ void PMM_Psi(int m, int n, double *x, double *y, int fnum){
 void PMM1_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi=0.0;
 
     double Q2 = 0.0;
     for (i = 0; i < m; ++i) {
         q += fabs(x[i]);
-        Q += pow(y[i]-x[i],2);
-        Q2 += y[i]-x[i];
+        phi = 0.01*pow(x[i], 3);
+        Q += pow(y[i]-phi,2);
+        Q2 += y[i]-phi;
     }
 
     P += q;
@@ -43,13 +44,14 @@ void PMM1_leader(int m, int n, double *x, double *y, double *F){
 void PMM1_follower(int m, int n, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     double Q2 = 0.0;
     for (i = 0; i < m; ++i) {
         q += fabs(x[i]);
-        Q += pow(y[i]-x[i],2);
-        Q2 += y[i]-x[i];
+        phi = 0.01*pow(x[i], 3);
+        Q += pow(y[i]-phi,2);
+        Q2 += y[i]-phi;
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -62,10 +64,11 @@ void PMM1_follower(int m, int n, double *x, double *y, double *f){
 void PMM2_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
+        phi = x[i] * sin(x[i]);
         Q += pow(pow(x[i], 3) - y[i],2);
     }
 
