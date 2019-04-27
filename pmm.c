@@ -69,7 +69,7 @@ void PMM2_leader(int m, int n, double *x, double *y, double *F){
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
         phi = x[i] * sin(x[i]);
-        Q += pow(pow(x[i], 3) - y[i],2);
+        Q += pow(y[i] - phi,2);
     }
 
     for (i = m; i < n; ++i){P += pow(x[i], 2);}
@@ -82,11 +82,12 @@ void PMM2_leader(int m, int n, double *x, double *y, double *F){
 void PMM2_follower(int m, int n, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(pow(x[i], 3) - y[i],2);
+        phi = x[i] * sin(x[i]);
+        Q += pow(y[i] - phi, 2);
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -97,13 +98,15 @@ void PMM2_follower(int m, int n, double *x, double *y, double *f){
 void PMM3_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
-    Q = pow(x[0]-y[0], 2);
+    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2));
+    Q = pow(x[0]-phi, 2);
     q = pow(x[0], 2);
     for (i = 1; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += 1e6*pow(x[i] - y[i], 2);
+        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2));
+        Q += 1e6*pow(x[i] - phi, 2);
     }
 
     P = q;
@@ -118,13 +121,15 @@ void PMM3_leader(int m, int n, double *x, double *y, double *F){
 void PMM3_follower(int m, int n, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
-    Q = pow(x[0]-y[0], 2);
+    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2));
+    Q = pow(x[0]-phi, 2);
     q = pow(x[0], 2);
     for (i = 1; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += 1e6*pow(x[i] - y[i], 2);
+        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2));
+        Q += 1e6*pow(x[i] - phi, 2);
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -135,12 +140,13 @@ void PMM3_follower(int m, int n, double *x, double *y, double *f){
 void PMM4_leader(int m, int n, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     Q = (double) 10*m;
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        phi = 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]);
+        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
@@ -155,12 +161,13 @@ void PMM4_leader(int m, int n, double *x, double *y, double *F){
 void PMM4_follower(int m, int n, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     Q = (double) 10*m;
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        phi = 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]);
+        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
@@ -212,12 +219,13 @@ void PMM5_follower(int m, int n, double *x, double *y, double *f){
 void PMM6_leader(int m, int n, double *x, double *y, double *F, double *G){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     double Q2 = 0.0;
     for (i = 0; i < m; ++i) {
         q += fabs(x[i]);
-        Q += pow(y[i]-x[i],2);
+        phi = 0.01*pow(x[i], 3);
+        Q += pow(y[i]-phi,2);
         Q2 += y[i]-x[i];
     }
 
@@ -234,7 +242,7 @@ void PMM6_leader(int m, int n, double *x, double *y, double *F, double *G){
     G[0] = 0.0;
     double min = fabs(y[0]);
     for (int i = 0; i < n; ++i) {
-        G[0] += pow(x[i], 2) + 50*cos(2*PI*x[i]);
+        G[0] += pow(x[i], 2) + 50*sin(2*PI*x[i]);
         min = (min > fabs(y[i])) ? fabs(y[i]) : min ;
     }
     G[0] -= min; 
@@ -244,13 +252,14 @@ void PMM6_leader(int m, int n, double *x, double *y, double *F, double *G){
 void PMM6_follower(int m, int n, double *x, double *y, double *f, double *g){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     double Q2 = 0.0;
     for (i = 0; i < m; ++i) {
         q += fabs(x[i]);
-        Q += pow(y[i]-x[i],2);
-        Q2 += y[i]-x[i];
+        phi = 0.01*pow(x[i], 3);
+        Q += pow(y[i]-phi,2);
+        Q2 += y[i]-phi;
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -271,11 +280,12 @@ void PMM6_follower(int m, int n, double *x, double *y, double *f, double *g){
 void PMM7_leader(int m, int n, double *x, double *y, double *F, double *G){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(pow(x[i], 3) - y[i],2);
+        phi = 100.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
+        Q += pow(y[i] - phi,2);
         P += fabs(x[i]);
     }
 
@@ -299,11 +309,12 @@ void PMM7_leader(int m, int n, double *x, double *y, double *F, double *G){
 void PMM7_follower(int m, int n, double *x, double *y, double *f, double *g){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0;
+    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        Q += pow(pow(x[i], 3) - y[i],2);
+        phi = 10.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
+        Q += pow(y[i] - phi,2);
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -316,7 +327,7 @@ void PMM7_follower(int m, int n, double *x, double *y, double *f, double *g){
     g[0] = 0.0;
     double min = fabs(x[0]);
     for (int i = 0; i < n; ++i) {
-        g[0] += pow(y[i], 2) + 50*cos(2*PI*y[i]);
+        g[0] += pow(y[i], 2) + 50*sin(2*PI*y[i]);
         min = min > fabs(x[i]) ? fabs(x[i]) : min;
     }
     g[0] -= min;
@@ -350,7 +361,7 @@ void PMM8_leader(int m, int n, double *x, double *y, double *F, double *G){
     G[0] = 0.0;
 
     for (int i = 0; i < n; ++i) {
-        G[0] += pow(y[i], 2) + 100*cos(2*PI*x[i]);
+        G[0] += pow(y[i], 2) + 100*sin(2*PI*x[i]);
     }
     ////////////////////////////////////////////////////////////////////////////
 }
@@ -411,7 +422,7 @@ void PMM9_leader(int m, int n, double *x, double *y, double *F, double *G){
     G[1] = 0.0;
     double min = fabs(y[0]);
     for (int i = 0; i < n; ++i) {
-        G[0] += pow(x[i], 2) + 100*cos(2*PI*x[i]);
+        G[0] += pow(x[i], 2) + 10*sin(2*PI*x[i]);
         G[1] += (i>=m) ? x[i] : 0;
         min = (min > fabs(y[i])) ? fabs(y[i]) : min ;
     }
@@ -458,12 +469,14 @@ void PMM9_follower(int m, int n, double *x, double *y, double *f, double *g){
 void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0;
+    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
+
 
     for (i = 0; i < m; ++i) {
         P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);;
         q += pow(x[i], 2) / 10.0 + floor(fabs(x[i]));
-        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        phi = -x[i]*fabs( sin(PI*x[i]) );
+        Q += pow(x[i] - phi, 2) - 10.0*cos(PI*fabs(x[i] - phi) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
@@ -481,7 +494,7 @@ void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
     G[1] = 1.0;
     double min = fabs(y[0]);
     for (int i = 0; i < n; ++i) {
-        G[0] += pow(x[i], 2) + 50*cos(2*PI*x[i]);
+        G[0] += pow(x[i], 2) + 50*sin(2*PI*x[i]);
         G[1] *= (i>=m) ? x[i] : 1.0;
         min = (min > fabs(y[i])) ? fabs(y[i]) : min ;
     }
@@ -515,7 +528,7 @@ void PMM10_follower(int m, int n, double *x, double *y, double *f, double *g){
     g[1] = 1.0;
     double min = fabs(y[0]);
     for (int i = 0; i < n; ++i) {
-        g[0] += pow(y[i], 2) + 50*cos(2*PI*y[i]);
+        g[0] += pow(y[i], 2) + 50*sin(2*PI*y[i]);
         g[1] *= (i>=m) ? y[i] : 1.0;
         min = (min > fabs(x[i])) ? fabs(x[i]) : min ;
     }
