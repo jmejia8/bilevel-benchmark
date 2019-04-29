@@ -1,22 +1,41 @@
 #include "constants.h"
 
-void PMM_config(int *settings, int fnum){
+void PMM_config(int D_ul, int D_ll, int *settings, int fnum){
+    int m = D_ul < D_ll? D_ul : D_ll;
+    m /= 2;
+
+    settings[0] = D_ul;
+    settings[1] = D_ll;
+    settings[2] = m;
+
     if ( 6 <= fnum && fnum <= 8) {
-        settings[0] = 1; settings[1] = 1;
+        settings[3] = 1; settings[4] = 1;
     }else if (fnum == 9 || fnum == 10) {
-        settings[0] = 2; settings[1] = 2;
+        settings[3] = 2; settings[4] = 2;
     }else{
-        settings[0] = 0; settings[1] = 0;
+        settings[3] = 0; settings[4] = 0;
     }
+
 }
 
-void PMM_Psi(int m, int n, double *x, double *y, int fnum){
+void PMM_Psi(int D_ul, int D_ll, int m, double *x, double *y, int fnum){
     int i = 1;
+    int n = D_ll;
 
-    if (fnum == 2 || fnum == 7){
-       for (i = 0; i < n; ++i) { y[i] = i < m ? pow(x[i], 3) : 0.0; }
-    }else if (1 <= fnum && fnum <= 10) {
+    if (fnum == 1 || fnum == 6){
+       for (i = 0; i < n; ++i) { y[i] = i < m ? 0.01*pow(x[i], 3) : 0.0; }
+    }else if (fnum == 2) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? x[i]*sin(x[i]) : 0.0; }
+    }else if (fnum == 3) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? 10.0/(1.0 + 2.5*x[i]*x[i]) - 10.0 : 0.0; }
+    }else if (fnum == 4) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]) : 0.0; }
+    }else if (fnum == 5 || fnum == 8 || fnum == 9) {
        for (i = 0; i < n; ++i) { y[i] = i < m ? x[i] : 0.0; }
+    }else if (fnum == 7) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? 10.0*exp(-0.01*x[i]*x[i])*sin(x[i]) : 0.0; }
+    }else if (fnum == 10) {
+       for (i = 0; i < n; ++i) { y[i] = i < m ? -x[i]*fabs(sin(PI*x[i])) : 0.0; }
     }
 }
 
@@ -100,13 +119,13 @@ void PMM3_leader(int m, int n, double *x, double *y, double *F){
 
     double P = 0.0, q  = 0.0, Q  = 0.0, phi;
 
-    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2));
-    Q = pow(x[0]-phi, 2);
+    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2)) - 10;
+    Q = pow(y[0]-phi, 2);
     q = pow(x[0], 2);
     for (i = 1; i < m; ++i) {
         q += pow(x[i], 2);
-        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2));
-        Q += 1e6*pow(x[i] - phi, 2);
+        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2)) - 10;
+        Q += 1e6*pow(y[i] - phi, 2);
     }
 
     P = q;
@@ -123,13 +142,13 @@ void PMM3_follower(int m, int n, double *x, double *y, double *f){
 
     double p = 0.0, q  = 0.0, Q  = 0.0, phi;
 
-    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2));
-    Q = pow(x[0]-phi, 2);
+    phi = 10.0/ (1.0 + 2.5*pow(x[0], 2)) - 10;
+    Q = pow(y[0]-phi, 2);
     q = pow(x[0], 2);
     for (i = 1; i < m; ++i) {
         q += pow(x[i], 2);
-        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2));
-        Q += 1e6*pow(x[i] - phi, 2);
+        phi = 10.0/ (1.0 + 2.5*pow(x[i], 2)) - 10;
+        Q += 1e6*pow(y[i] - phi, 2);
     }
 
     for (i = m; i < n; ++i){p += pow(y[i], 2);}
@@ -284,7 +303,7 @@ void PMM7_leader(int m, int n, double *x, double *y, double *F, double *G){
 
     for (i = 0; i < m; ++i) {
         q += pow(x[i], 2);
-        phi = 100.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
+        phi = 10.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
         Q += pow(y[i] - phi,2);
         P += fabs(x[i]);
     }
@@ -469,14 +488,14 @@ void PMM9_follower(int m, int n, double *x, double *y, double *f, double *g){
 void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
+    double P = 0.0, q  = 0.0, Q = 10.0*m, phi;
 
 
     for (i = 0; i < m; ++i) {
         P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);;
         q += pow(x[i], 2) / 10.0 + floor(fabs(x[i]));
         phi = -x[i]*fabs( sin(PI*x[i]) );
-        Q += pow(x[i] - phi, 2) - 10.0*cos(PI*fabs(x[i] - phi) / ( 0.001 + pow(x[m], 2) ));
+        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
     }
 
     for (i = m; i < n; ++i){
@@ -506,12 +525,13 @@ void PMM10_leader(int m, int n, double *x, double *y, double *F, double *G){
 void PMM10_follower(int m, int n, double *x, double *y, double *f, double *g){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 10.0*m;
+    double p = 0.0, q  = 0.0, Q = 10.0*m, phi;
 
     q += pow(x[m], 2) + floor(fabs(x[m]));
     for (i = 0; i < m; ++i) {
         q += pow(x[m], 2) + floor(fabs(x[m]));
-        Q += pow(x[i] - y[i], 2) - 10.0*cos(PI*fabs(x[i] - y[i]) / ( 0.001 + pow(x[m], 2) ));
+        phi = -x[i]*fabs( sin(PI*x[i]) );
+        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
         
     }
 
