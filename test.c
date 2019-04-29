@@ -5,6 +5,8 @@
 #include "blb18_op.c"
 #include "utils.h"
 
+#define DEBUG 1
+
 double PMM_test1(int m, int n){
     int FNUN = 10, fnum;
 
@@ -21,7 +23,7 @@ double PMM_test1(int m, int n){
         PMM_follower(m, n, x, y, f, g, fnum);
 
         f_sum += fabs( F[0] + f[0] );
-        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+        // printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
     } 
     return f_sum;
 }
@@ -37,19 +39,25 @@ double PMM_test2(int m, int n){
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
         randm(-1.0, 1, x, 1*n);
-        PMM_Psi(m, n, x, y, fnum);
+        PMM_Psi(n,n,m, x, y, fnum);
 
         PMM_leader(m, n, x, y, F,G, fnum);
         PMM_follower(m, n, x, y, f, g, fnum);
 
-        f_sum += fabs( F[0] + f[0] );
-        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+        f_sum += fabs( f[0]);
+        
+        if (fnum > 5 && DEBUG) {
+            printf("PMM%d \t F = %.4e \t f = %.4e \t G = %.4e \t g = %.4e\n", fnum, F[0], f[0], G[0], g[0]);
+        }else if (DEBUG){
+            printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
+        }
+
     }
 
-    // printf("--------------------------\n");
+    if (DEBUG) printf("--------------------------\n");
 
     for (i = 0; i < n; ++i) {
-        x[i] = 0; y[i] = 0.0;
+        x[i] = 0.0; y[i] = 0.0;
     }
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
@@ -57,8 +65,18 @@ double PMM_test2(int m, int n){
         PMM_leader(m, n, x, y, F,G, fnum);
         PMM_follower(m, n, x, y, f, g, fnum);
 
-        f_sum += fabs( F[0] + f[0] );
-        // printf("PMM%d \t F = %lf \t f = %lf\n", fnum, F[0], f[0]);
+        if (fnum <= 5) {
+            f_sum += fabs( F[0] + f[0] );
+            if (DEBUG) printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
+        }else{
+            double ss = fabs( F[0] + f[0]);
+            ss += G[0] > 0 ? G[0]: 0.0;
+            ss += g[0] > 0 ? g[0]: 0.0;
+            f_sum += ss;
+            if (DEBUG) printf("PMM%d \t F = %.4e \t f = %.4e \t G = %.4e \t g = %.4e\n", fnum, F[0], f[0], G[0], g[0]);
+        }
+
+        printf("%lf\n", f_sum);
     }
 
 
@@ -66,8 +84,7 @@ double PMM_test2(int m, int n){
 }
 
 double PMM_test(int m, int n){
-    double a = PMM_test1(m, n);
-    a += PMM_test2(m, n);
+    double a = PMM_test2(m, n);
     return a;
 }
 
@@ -107,7 +124,7 @@ int test(){
         blb18_follower_cop(1, D_ul, D_ll, x, y, f, g, id);
 
         if (id < 10 && abs(F[0]) + abs(f[0]) > 1e-8) {
-            printf("%d --> F = %e \t f = %e\n", id, F[0], f[0]);
+            printf("%d --> F = %.4e \t f = %.4e\n", id, F[0], f[0]);
             f_sum += F[0] + f[0];
         }
 
@@ -130,7 +147,13 @@ int test(){
 int main(int argc, char const *argv[])
 {  
     srand(time(NULL));
-    PMM_test(5, 10);
+    double r = PMM_test(5, 10);
+    if (r > 1e-16) {
+        printf("Errors in PMM: %g\n", r);
+        exit(0);
+    }else{
+        printf("PMM: OK\n");
+    }
     test();
     int i, j, id, settings[6];
 
