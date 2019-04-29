@@ -245,7 +245,7 @@ void PMM6_leader(int m, int n, double *x, double *y, double *F, double *G){
         q += fabs(x[i]);
         phi = 0.01*pow(x[i], 3);
         Q += pow(y[i]-phi,2);
-        Q2 += y[i]-x[i];
+        Q2 += y[i]-phi;
     }
 
     for (i = m; i < n; ++i) {
