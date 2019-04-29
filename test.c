@@ -38,7 +38,7 @@ double PMM_test2(int m, int n){
 
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
-        randm(-1.0, 1, x, 1*n);
+        randm(-10.0, 10.0, x, 1*n);
         PMM_Psi(n,n,m, x, y, fnum);
 
         PMM_leader(m, n, x, y, F,G, fnum);
@@ -76,7 +76,6 @@ double PMM_test2(int m, int n){
             if (DEBUG) printf("PMM%d \t F = %.4e \t f = %.4e \t G = %.4e \t g = %.4e\n", fnum, F[0], f[0], G[0], g[0]);
         }
 
-        printf("%lf\n", f_sum);
     }
 
 
