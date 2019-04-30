@@ -7,20 +7,20 @@
 
 #define DEBUG 1
 
-double PMM_test1(int m, int n){
+double PMM_test1(int D_ul, int D_ll){
     int FNUN = 10, fnum;
 
-    double *x = array(n);
-    double *y = array(n);
+    double *x = array(D_ul);
+    double *y = array(D_ll);
     double F[1], f[1], f_sum = 0;
     double G[2], g[2];
 
-    randm(-1.0, 1, x, 1*n);
-    randm(-1, 1.0, y, 1*n);
+    randm(-1.0, 1, x, 1*D_ul);
+    randm(-1, 1.0, y, 1*D_ll);
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
-        PMM_leader(m, n, x, y, F,G, fnum);
-        PMM_follower(m, n, x, y, f, g, fnum);
+        PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
+        PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
 
         f_sum += fabs( F[0] + f[0] );
         // printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
@@ -28,23 +28,26 @@ double PMM_test1(int m, int n){
     return f_sum;
 }
 
-double PMM_test2(int m, int n){
+double PMM_test2(int D_ul, int D_ll){
     int FNUN = 10, fnum, i;
+    int m = D_ul < D_ll? D_ul : D_ll;
+    m /= 2;
 
-    double *x = array(n);
-    double *y = array(n);
+    double *x = array(D_ul);
+    double *y = array(D_ll);
     double F[1], f[1], f_sum = 0;
     double G[2], g[2];
 
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
-        randm(-10.0, 10.0, x, 1*n);
-        PMM_Psi(n,n,m, x, y, fnum);
+        randm(-10.0, 10.0, x, 1*D_ul);
+        PMM_Psi(D_ul,D_ll,m, x, y, fnum);
 
-        PMM_leader(m, n, x, y, F,G, fnum);
-        PMM_follower(m, n, x, y, f, g, fnum);
+        PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
+        PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
 
         f_sum += fabs( f[0]);
+        f_sum += F[0] < 0 ? fabs(F[0]) : 0.0;
         
         if (fnum > 5 && DEBUG) {
             printf("PMM%d \t F = %.4e \t f = %.4e \t G = %.4e \t g = %.4e\n", fnum, F[0], f[0], G[0], g[0]);
@@ -56,14 +59,18 @@ double PMM_test2(int m, int n){
 
     if (DEBUG) printf("--------------------------\n");
 
-    for (i = 0; i < n; ++i) {
-        x[i] = 0.0; y[i] = 0.0;
+    for (i = 0; i < D_ul; ++i) {
+        x[i] = 0.0;
+
+    }
+    for (i = 0; i < D_ll; ++i) {
+        y[i] = 0.0;
     }
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
 
-        PMM_leader(m, n, x, y, F,G, fnum);
-        PMM_follower(m, n, x, y, f, g, fnum);
+        PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
+        PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
 
         if (fnum <= 5) {
             f_sum += fabs( F[0] + f[0] );
@@ -82,8 +89,8 @@ double PMM_test2(int m, int n){
     return f_sum;
 }
 
-double PMM_test(int m, int n){
-    double a = PMM_test2(m, n);
+double PMM_test(int D_ul, int D_ll){
+    double a = PMM_test2(D_ul, D_ll);
     return a;
 }
 
