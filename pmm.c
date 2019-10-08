@@ -38,561 +38,116 @@ void PMM_Psi(int D_ul, int D_ll, int m, double *x, double *y, int fnum){
     }
 }
 
-void PMM1_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F){
+void PMM1_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi=0.0;
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    double Q2 = 0.0;
-    for (i = 0; i < m; ++i) {
-        q += fabs(x[i]);
-        phi = 0.01*pow(x[i], 3);
-        Q += pow(y[i]-phi,2);
-        Q2 += y[i]-phi;
+    r += x[0]*x[0];
+    for (i = 1; i < k; ++i){
+        q += y[i]*y[i];
+        r += x[i]*x[i];
     }
 
-    P += q;
-    for (i = m; i < D_ul; ++i){P += fabs(x[i]);}
 
-    Q += pow(0.5*Q2,2) + pow(0.5*Q2,4);
+    q = 10.0 + y[0] + 1e6*q;
 
-    F[0] = P - q*Q;
+    p1 = q  - r;
+
+    q  = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
+        r += x[i]*x[i];
+    }
+
+    p2 = q + r;
+
+    double Q = fabs(p1);
+    F[0] = Q + p2;
 }
 
-void PMM1_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f){
+void PMM1_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    double Q2 = 0.0;
-    for (i = 0; i < m; ++i) {
-        q += fabs(x[i]);
-        phi = 0.01*pow(x[i], 3);
-        Q += pow(y[i]-phi,2);
-        Q2 += y[i]-phi;
+    r += x[0]*x[0];
+    for (i = 1; i < k; ++i){
+        q += y[i]*y[i];
+        r += x[i]*x[i];
     }
 
-    for (i = m; i < D_ll; ++i){p += pow(y[i], 2);}
 
-    Q += pow(0.5*Q2,2) + pow(0.5*Q2,4);
+    q = 10.0 + y[0] + 1e6*q;
 
-    f[0] = p + q*Q;
+    p1 = q  - r;
+
+    q  = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
+        r += x[i]*x[i];
+    }
+
+    p2 = q + r;
+
+    f[0] = p1 + p2;
 }
 
-void PMM2_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F){
+
+void PMM2_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     int i;
 
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = x[i] * sin(x[i]);
-        Q += pow(y[i] - phi,2);
+    r += x[0]*x[0];
+    for (i = 1; i < k; ++i){
+        q += y[i]*y[i];
+        r += x[i]*x[i];
     }
 
-    for (i = m; i < D_ul; ++i){P += pow(x[i], 2);}
 
-    P = 1e6*q + P;
+    q = 10.0 + y[0] + 1e6*q;
 
-    F[0] = P - q*Q;
+    p1 = q  - r;
+
+    q  = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow(y[i] - 0.01*(pow(x[i], 3)), 2);
+        r += x[i]*x[i];
+    }
+
+    p2 = q - r;
+
+    F[0] = abs(p1) + abs(p2);
 }
 
-void PMM2_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f){
+void PMM2_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     int i;
 
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = x[i] * sin(x[i]);
-        Q += pow(y[i] - phi, 2);
+    r += x[0]*x[0];
+    for (i = 1; i < k; ++i){
+        q += y[i]*y[i];
+        r += x[i]*x[i];
     }
 
-    for (i = m; i < D_ll; ++i){p += pow(y[i], 2);}
 
-    f[0] = p + q*Q;
+    q = 10.0 + y[0] + 1e6*q;
+
+    p1 = q  - r;
+
+    q  = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
+        r += x[i]*x[i];
+    }
+
+    p2 = q + r;
+
+    f[0] = p1 + p2;
 }
 
-void PMM3_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    phi = (10.0/ (1.0 + 2.5*pow(x[0], 2))) - 10.0;
-    Q = pow(y[0]-phi, 2);
-    q = pow(x[0], 2);
-    for (i = 1; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = (10.0/ (1.0 + 2.5*pow(x[i], 2))) - 10.0;
-        Q += 1e6*pow(y[i] - phi, 2);
-    }
-
-    P = q;
-    for (i = m; i < D_ul; ++i){
-        P += fabs(x[i]);
-    }
-
-
-    F[0] = P - q*Q;
-}
-
-void PMM3_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    phi = (10.0/ (1.0 + 2.5*pow(x[0], 2))) - 10.0;
-    Q = pow(y[0]-phi, 2);
-    q = pow(x[0], 2);
-    for (i = 1; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = (10.0/ (1.0 + 2.5*pow(x[i], 2))) - 10.0;
-        Q += 1e6*pow(y[i] - phi, 2);
-    }
-
-    for (i = m; i < D_ll; ++i){p += pow(y[i], 2);}
-
-    f[0] = p + q*Q;
-}
-
-void PMM4_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    Q = (double) 10*m;
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]);
-        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
-    }
-
-    Q *= pow(x[0], 4);
-
-
-    for (i = m; i < D_ul; ++i){
-        P += pow(x[i], 2);
-    }
-
-    P += 1e6*q ;
-
-    F[0] = P - q*Q;
-}
-
-void PMM4_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    Q = (double) 10*m;
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]);
-        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
-    }
-
-    for (i = m; i < D_ll; ++i){
-        p += pow(y[i], 4);
-    }
-
-    f[0] = p + q*Q;
-}
-
-void PMM5_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0;
-    double prod = 1.0;
-    for (i = 0; i < m; ++i) {
-        q += pow(fabs(x[i]), i+2);
-        Q += pow(y[i] - x[i], 2);
-        prod *= cos(10.0*fabs(y[i] - x[i]) / sqrt((double) i + 1));
-    }
-
-    Q = 1.0 + 0.025*Q - prod;
-
-    P = 10.0*q + (double) 10.0*(D_ul-m);
-    for (i = m; i < D_ul; ++i){
-        P += pow(x[i], 2) - 10.0*cos(2.0*PI*x[i]);
-    }
-
-    F[0] = P - q*Q;
-}
-
-void PMM5_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, prod=1.0;
-
-    q += pow(x[m-1], 2);
-    for (i = 0; i < m-1; ++i) {
-        q += pow(fabs(x[i]), i+2);
-        Q += pow(y[i] - x[i], 2);
-        prod *= cos(10.0*fabs(y[i] - x[i]) / sqrt((double) i + 1));
-    }
-
-    Q = 1.0 + 0.025*Q - prod;
-
-
-    for (i = m; i < D_ll; ++i){
-        p += pow(y[i], 2);
-    }
-
-    f[0] = p + q*Q;
-}
-
-void PMM6_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F, double *G){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    double Q2 = 0.0;
-    for (i = 0; i < m; ++i) {
-        q += fabs(x[i]);
-        phi = 0.01*pow(x[i], 3);
-        Q += pow(y[i]-phi,2);
-        Q2 += y[i]-phi;
-    }
-
-    P = fabs(x[m]);
-    for (i = m+1; i < D_ul; ++i) {
-        P =(P < fabs(x[i])) ? fabs(x[i]) : P ;
-    }
-
-    for (i = 0; i < m; ++i) {
-        P += fabs(x[i]);
-    }
-
-    Q += pow(0.5*Q2,2) + pow(0.5*Q2,4);
-
-    F[0] = P - q*Q;
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    G[0] = 0.0;
-    double min = fabs(y[0]);
-    for (i = 1; i < D_ll; ++i) { min = (min > fabs(y[i])) ? fabs(y[i]) : min ; }
-    for (i = 0; i < D_ul; ++i) {
-        G[0] += pow(x[i], 2) - 50*sin(2*PI*x[i]);
-    }
-    G[0] -= min; 
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM6_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f, double *g){
-    int i;
-    g[0] = 1.0;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    double Q2 = 0.0;
-    for (i = 0; i < m; ++i) {
-        q += fabs(x[i]);
-        phi = 0.01*pow(x[i], 3);
-        Q += pow(y[i]-phi,2);
-        Q2 += y[i]-phi;
-        // Constraints
-        g[0] *= y[i] - phi;
-    }
-
-    for (i = m; i < D_ll; ++i){p += pow(y[i], 2);}
-
-    Q += pow(0.5*Q2,2) + pow(0.5*Q2,4);
-
-    f[0] = p + q*Q;
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM7_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F, double *G){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = 10.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
-        Q += pow(y[i] - phi,2);
-        P += fabs(x[i]);
-    }
-
-    for (i = m; i < D_ul; ++i){P += fabs(x[i]);}
-
-    F[0] = P - q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    G[0] = 1.0;
-    q = 0.0;
-    for (i = 0; i < D_ul; ++i) {
-        G[0] *= x[i];
-    }
-    for (i = 0; i < D_ll; ++i) {
-        q += fabs(y[i]);
-    }
-    G[0] -= q; 
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM7_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f, double *g){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, phi;
-
-    for (i = 0; i < m; ++i) {
-        q += pow(x[i], 2);
-        phi = 10.0*exp( -0.01*pow(x[i],2) )*sin(x[i]);
-        Q += pow(y[i] - phi,2);
-    }
-
-    for (i = m; i < D_ll; ++i){p += pow(y[i], 2);}
-
-    f[0] = p + q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    g[0] = 0.0;
-    double min = fabs(x[0]);
-    for (i = 0; i < D_ll; ++i) {
-        g[0] += pow(y[i], 2) + 50*sin(2*PI*y[i]);
-        min = min > fabs(x[i]) ? fabs(x[i]) : min;
-    }
-    g[0] -= min;
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM8_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F, double *G){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0;
-
-    Q = pow(x[0]-y[0], 2);
-    P += fabs(x[0]);
-    q = fabs(x[0]);
-    for (i = 1; i < m; ++i) {
-        P += fabs(x[i]);
-        Q += 1e6*pow(x[i] - y[i], 2);
-        q = (q > fabs(x[i])) ? fabs(x[i]) : q;
-    }
-
-    for (i = m; i < D_ul; ++i){
-        P += 100*pow(x[i], 2);
-    }
-
-
-    F[0] = P - q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    G[0] = 0.0;
-
-    for (i = 0; i < D_ll; ++i) {
-        G[0] += pow(y[i], 2);
-    }
-    for (i = 0; i < D_ul; ++i) {
-        G[0] += 100*sin(2*PI*x[i]);
-
-    }
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM8_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f, double *g){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0;
-
-    Q = pow(x[0]-y[0], 2);
-    q = fabs(x[0]);
-    for (i = 1; i < m; ++i) {
-        Q += 1e6*pow(x[i] - y[i], 2);
-        q = (q > fabs(x[i])) ? fabs(x[i]) : q;
-    }
-
-    p = (double) 10.0*(D_ll-m);
-    for (i = m; i < D_ll; ++i){
-        p += pow(y[i], 2) - 10.0*cos(2*PI*y[i]);
-    }
-
-    f[0] = p + q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    g[0] = 1.0;
-    for (i = 0; i < D_ll; ++i) {
-        g[0] *= sin(y[i]);
-    }
-
-    q = 0.0;
-    for (i = 0; i < D_ul; ++i){
-        q += x[i];
-    }
-
-    g[0] -= 0.3*sin(q);
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM9_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F, double *G){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q  = 0.0, prod = 1.0;
-
-    for (i = 0; i < m; ++i) {
-        P += pow(x[i], 2);
-        q += fabs(x[i]);
-        Q += pow(y[i] - x[i], 2);
-        prod *= cos(10.0*fabs(y[i] - x[i]) / sqrt((double) i + 1));
-    }
-
-    Q = 1.0 + 0.025*Q - prod;
-
-    q *= 100.0;
-
-    P *= 1e6;
-    for (i = m; i < D_ul; ++i){ P += pow(x[i], 2);}
-
-    F[0] = P - q*Q;
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    G[0] = 0.0;
-    G[1] = 0.0;
-    double min = fabs(y[0]);
-    for (i = 0; i < D_ul; ++i) {
-        G[0] += pow(x[i], 2) + 50*sin(2*PI*x[i]);
-        G[1] += (i>=m) ? x[i] : 0;
-    }
-    for (i = i; i < D_ll; ++i) {
-        min = (min > fabs(y[i])) ? fabs(y[i]) : min ;
-    }
-
-    G[0] -= min;
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM9_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f, double *g){
-    int i,j;
-
-    double p = 0.0, q  = 0.0, Q  = 0.0, prod = 1.0;
-
-    for (i = 0; i < m; ++i) {
-        q += fabs(x[i]);
-        Q += pow(y[i] - x[i], 2);
-        prod *= cos(10.0*fabs(y[i] - x[i]) / sqrt((double) i + 1));
-    }
-
-    Q = 1.0 + 0.025*Q - prod;
-
-    for (i = m+1; i < D_ll; ++i) {
-        for (j = m+1; j < i; ++j) {
-            p += pow(y[j], 2);        
-        }
-    }
-    
-
-    q *= 100;
-
-
-    f[0] = p + q*Q;
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    g[0] = 1.0;
-    g[1] = 0.0;
-    double max = pow(y[0], 2);
-    for (i = 0; i < m; ++i) {
-        g[0] *= y[i] - x[i];
-    }
-    for (i = m; i < D_ul; ++i) {
-        g[1] += pow(y[i], 2) ;
-        max = (max < pow(y[i], 2)) ? pow(y[i], 2) : max;
-    }
-    g[1] -= (double) (D_ll -m)  * max;
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM10_leader(int D_ul, int D_ll, int m, double *x, double *y, double *F, double *G){
-    int i;
-
-    double P = 0.0, q  = 0.0, Q = 10.0*m, phi;
-
-
-    for (i = 0; i < m; ++i) {
-        P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);;
-        q += 0.1*pow(x[i], 2) + floor(fabs(x[i]));
-        phi = -x[i]*fabs( sin(PI*x[i]) );
-        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
-    }
-
-    for (i = m; i < D_ul ; ++i){
-        P += pow(x[i], 2) - 10.0*cos(2*PI*x[i]);
-    }
-
-    P += 10.0*D_ul;
-    
-    F[0] = P - q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    G[0] = 0.0;
-    G[1] = 1.0;
-    for (i = 0; i < D_ul; ++i) {
-        G[0] += pow(x[i], 2) + 50*sin(2*PI*x[i]);
-        G[1] *= (i>=m) ? x[i] : 1.0;
-    }
-
-    double min = fabs(y[0]);
-    for (i = 0; i < D_ll; ++i) {
-        min = (min > fabs(y[i])) ? fabs(y[i]) : min ;
-    }
-
-    G[0] -= min;
-    ////////////////////////////////////////////////////////////////////////////
-}
-
-void PMM10_follower(int D_ul, int D_ll, int m, double *x, double *y, double *f, double *g){
-    int i;
-
-    double p = 0.0, q  = 0.0, Q = 10.0*m, phi;
-
-    q += pow(x[m], 2) + floor(fabs(x[m]));
-    for (i = 0; i < m; ++i) {
-        q += pow(x[m], 2) + floor(fabs(x[m]));
-        phi = -x[i]*fabs( sin(PI*x[i]) );
-        Q += pow(y[i] - phi, 2) - 10.0*cos(PI*fabs(y[i] - phi) / ( 0.001 + pow(x[m], 2) ));
-        
-    }
-
-    for (i = m; i < D_ll; ++i){
-        p = pow(y[i], 2);
-    }
-
-    f[0] = p - q*Q;
-
-    ////////////////////////////////////////////////////////////////////////////
-    ///// Constraints
-    ////////////////////////////////////////////////////////////////////////////
-    g[0] = 0.0;
-    g[1] = 1.0;
-    double min = fabs(y[0]);
-    for (i = 0; i < m; ++i) {
-        g[0] += pow(y[i], 2) + 10*sin(2*PI*y[i]);
-        min = (min > fabs(x[i])) ? fabs(x[i]) : min ;
-    }
-
-    for (i = m; i < D_ll; ++i) {
-        g[1] *= y[i];
-    }
-
-    g[0] -= min;
-    ////////////////////////////////////////////////////////////////////////////
-}
 
 void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
     int m = D_ul < D_ll? D_ul : D_ll;
