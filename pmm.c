@@ -60,7 +60,7 @@ void PMM1_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
         r += x[i]*x[i];
     }
 
-    p2 = q + r;
+    p2 = q - r;
 
     double Q = fabs(p1);
     F[0] = Q + p2;
@@ -88,7 +88,7 @@ void PMM1_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
         r += x[i]*x[i];
     }
 
-    p2 = q + r;
+    p2 = q - r;
 
     f[0] = p1 + p2;
 }
@@ -172,12 +172,11 @@ void PMM3_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     p1 = q  - r;
 
-    q =  = r = 0.0;
+    q  = r = 0.0;
     for (i = k; i < D_ul; ++i){
-        q += fabs( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]) );
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
         r += x[i]*x[i];
     }
-
     p2 = q - r;
 
     F[0] = abs(p1) + abs(p2);
@@ -195,9 +194,9 @@ void PMM3_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     p1 = q  - r;
 
-    q =  = r = 0.0;
+    q  = r = 0.0;
     for (i = k; i < D_ul; ++i){
-        q += fabs( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]) );
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
         r += x[i]*x[i];
     }
 
@@ -206,6 +205,58 @@ void PMM3_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     f[0] = p1 + p2;
 }
 
+void PMM4_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    q = 10*k;
+    for (i = 0; i < k; ++i){
+        q += y[i]*y[i]- 10*cos( 2*PI *y[i] * y[i]);
+        r += x[i]*x[i];
+    }
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += fabs( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]) );
+        r += x[i]*x[i];
+    }
+
+    p2 = q - r;
+
+    double Q = fabs(p1);
+    F[0] = Q + p2;
+}
+
+void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    r += x[0]*x[0];
+    for (i = 1; i < k; ++i){
+        q += y[i]*y[i];
+        r += x[i]*x[i];
+    }
+
+
+    q = 10.0 + y[0] + 1e6*q;
+
+    p1 = q  - r;
+
+    q  = r = 0.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
+        r += x[i]*x[i];
+    }
+
+    p2 = q + r;
+
+    f[0] = p1 + p2;
+}
 
 
 void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
