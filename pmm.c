@@ -304,6 +304,61 @@ void PMM5_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     f[0] = p1 + p2;
 }
 
+void PMM6_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    q = r = 10*k;
+    for (i = 0; i < k; ++i){
+        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        r += x[i]*x[i]- 10*cos( 2*PI *x[i]);
+    }
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    double prod = 1.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow( y[i] - x[i], 2 );
+        prod = cos( 10*(y[i] - x[i]) / sqrt( i - k + 1 ) );
+        r += x[i]*x[i];
+    }
+    q = 1.0 + ( 1.0 / 40.0 )*q - prod;
+
+    p2 = q - r;
+
+    F[0] = fabs(p1) + fabs(p2);
+}
+
+void PMM6_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    q = r = 10*k;
+    for (i = 0; i < k; ++i){
+        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        r += x[i]*x[i]- 10*cos( 2*PI *x[i]);
+    }
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    double prod = 1.0;
+    for (i = k; i < D_ul; ++i){
+        q += pow( y[i] - x[i], 2 );
+        prod = cos( 10*(y[i] - x[i]) / sqrt( i - k + 1 ) );
+        r += x[i]*x[i];
+    }
+    q = 1.0 + ( 1.0 / 40.0 )*q - prod;
+
+    p2 = q - r;
+
+    f[0] = p1 + p2;
+}
 
 
 void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
