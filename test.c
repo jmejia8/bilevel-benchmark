@@ -8,7 +8,7 @@
 #define DEBUG 1
 
 double PMM_test1(int D_ul, int D_ll){
-    int FNUN = 10, fnum;
+    int FNUN = 6, fnum;
 
     double *x = array(D_ul);
     double *y = array(D_ll);
@@ -29,7 +29,7 @@ double PMM_test1(int D_ul, int D_ll){
 }
 
 double PMM_test2(int D_ul, int D_ll){
-    int FNUN = 10, fnum, i;
+    int FNUN = 6, fnum, i;
     int m = D_ul < D_ll? D_ul : D_ll;
     m /= 2;
 

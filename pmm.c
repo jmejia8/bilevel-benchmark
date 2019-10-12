@@ -98,7 +98,7 @@ void PMM2_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    double a = s = 0.0;
+    double a = 0.0, s = 0.0;
 
     r += x[0]*x[0];
     for (i = 0; i < k; ++i){
@@ -123,7 +123,7 @@ void PMM2_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     p2 = q - r;
 
-    F[0] = abs(p1) + abs(p2);
+    F[0] = fabs(p1) + fabs(p2);
 }
 
 void PMM2_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
@@ -131,7 +131,7 @@ void PMM2_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    double a = s = 0.0;
+    double a = 0.0, s = 0.0;
 
     r += x[0]*x[0];
     for (i = 0; i < k; ++i){
@@ -178,7 +178,7 @@ void PMM3_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     }
     p2 = q - r;
 
-    F[0] = abs(p1) + abs(p2);
+    F[0] = fabs(p1) + fabs(p2);
 }
 
 void PMM3_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
@@ -375,8 +375,8 @@ void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, 
     }else if (fnum == 5) {
         PMM5_leader(D_ul, D_ll, m, x, y, F);
     }else if (fnum == 6) {
-        PMM6_leader(D_ul, D_ll, m, x, y, F, G);
-    }else if (fnum == 7) {
+        PMM6_leader(D_ul, D_ll, m, x, y, F);
+    }/*else if (fnum == 7) {
         PMM7_leader(D_ul, D_ll, m, x, y, F, G);
     }else if (fnum == 8) {
         PMM8_leader(D_ul, D_ll, m, x, y, F, G);
@@ -384,7 +384,7 @@ void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, 
         PMM9_leader(D_ul, D_ll, m, x, y, F, G);
     }else if (fnum == 10) {
         PMM10_leader(D_ul, D_ll, m, x, y, F, G);
-    }
+    }*/
 }
 
 void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g, int fnum){
@@ -401,8 +401,8 @@ void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g
     }else if (fnum == 5) {
         PMM5_follower(D_ul, D_ll, m, x, y, f);
     }else if (fnum == 6) {
-        PMM6_follower(D_ul, D_ll, m, x, y, f, g);
-    }else if (fnum == 7) {
+        PMM6_follower(D_ul, D_ll, m, x, y, f);
+    }/*else if (fnum == 7) {
         PMM7_follower(D_ul, D_ll, m, x, y, f, g);
     }else if (fnum == 8) {
         PMM8_follower(D_ul, D_ll, m, x, y, f, g);
@@ -410,6 +410,6 @@ void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g
         PMM9_follower(D_ul, D_ll, m, x, y, f, g);
     }else if (fnum == 10) {
         PMM10_follower(D_ul, D_ll, m, x, y, f, g);
-    }
+    }*/
 }
 
