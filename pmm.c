@@ -62,8 +62,7 @@ void PMM1_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     p2 = q - r;
 
-    double Q = fabs(p1);
-    F[0] = Q + p2;
+    F[0] = fabs(p1) + fabs(p2);
 }
 
 void PMM1_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
@@ -227,8 +226,7 @@ void PMM4_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     p2 = q - r;
 
-    double Q = fabs(p1);
-    F[0] = Q + p2;
+    F[0] = fabs(p1) + fabs(p2);
 }
 
 void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
@@ -255,6 +253,57 @@ void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     f[0] = p1 + p2;
 }
+
+void PMM5_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    for (i = 0; i < k; ++i){
+        q += pow(fabs(y[i]), 2 + i);
+        r += x[i]*x[i];
+    }
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    q = 10*(D_ul - k);
+    for (i = k; i < D_ul; ++i){
+        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
+        r += x[i]*x[i];
+    }
+
+    p2 = q - r;
+
+    F[0] = fabs(p1) + fabs(p2);
+}
+
+void PMM5_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
+    int i;
+
+    double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
+
+    for (i = 0; i < k; ++i){
+        q += pow(fabs(y[i]), 2 + i);
+        r += x[i]*x[i];
+    }
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    q = 10*(D_ul - k);
+    for (i = k; i < D_ul; ++i){
+        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
+        r += x[i]*x[i];
+    }
+
+    p2 = q - r;
+
+    f[0] = p1 + p2;
+}
+
 
 
 void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
