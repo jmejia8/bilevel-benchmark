@@ -137,7 +137,7 @@ void PMM2_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     q = pow(y[0] - x[0]*sin(x[0]), 2);
     r += x[0]*x[0];
-    for (i = 0; i < k; ++i){
+    for (i = 1; i < k; ++i){
         q += 1e6 * pow(y[i] - x[i]*sin(x[i]), 2);
         r += x[i]*x[i];
     }
