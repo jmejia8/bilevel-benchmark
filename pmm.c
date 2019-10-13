@@ -27,7 +27,8 @@ void PMM_Psi(int D_ul, int D_ll, int k, double *x, double *y, int fnum){
     }else if (fnum == 2) {
        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? x[i]*sin(x[i]) : sqrt((double) i+1 ); }
     }else if (fnum == 3) {
-       for (i = 0; i < D_ll; ++i) { y[i] = i < k ? (10.0/(1.0 + 2.5*x[i]*x[i])) - 10.0 : 0.0; }
+        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) : 1.0; }
+       // for (i = 0; i < D_ll; ++i) { y[i] = i < k ? (10.0/(1.0 + 2.5*x[i]*x[i])) - 10.0 : 0.0; }
     }else if (fnum == 4) {
        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]) : 0.0; }
     }else if (fnum == 5 || fnum == 8 || fnum == 9) {
@@ -171,18 +172,23 @@ void PMM3_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    for (i = 0; i < k-1; ++i){
+    for (i = 0; i < k; ++i){
         q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
         r += x[i]*x[i];
     }
+
 
     p1 = q  - r;
 
     q  = r = 0.0;
     for (i = k; i < D_ll-1; ++i){
-        q += 100*pow(y[i]*y[i] - y[i+1], 2 ) + y[i] - 1;
+        q += 100*pow(y[i]*y[i] - y[i+1], 2 ) + pow(y[i] - 1, 2);
+    }
+    
+    for (i = k; i < D_ul; ++i){
         r += x[i]*x[i];
     }
+
     p2 = q - r;
 
     F[0] = fabs(p1) + fabs(p2);
@@ -193,16 +199,20 @@ void PMM3_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    for (i = 0; i < k-1; ++i){
-        q += 100*pow(y[i]*y[i] - y[i+1], 2 ) + y[i] - 1;
+    for (i = 0; i < k; ++i){
+        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
         r += x[i]*x[i];
     }
+
 
     p1 = q  - r;
 
     q  = r = 0.0;
+    for (i = k; i < D_ll-1; ++i){
+        q += 100*pow(y[i]*y[i] - y[i+1], 2 ) + pow(y[i] - 1, 2);
+    }
+    
     for (i = k; i < D_ul; ++i){
-        q += pow(y[i] - (pow(x[i], 3) / 100.0), 2);
         r += x[i]*x[i];
     }
 
