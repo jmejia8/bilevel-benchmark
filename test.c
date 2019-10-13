@@ -57,17 +57,16 @@ double PMM_test2(int D_ul, int D_ll){
 
     }
 
+    // optimal feasible solutions
     if (DEBUG) printf("--------------------------\n");
 
     for (i = 0; i < D_ul; ++i) {
         x[i] = 0.0;
+    }
 
-    }
-    for (i = 0; i < D_ll; ++i) {
-        y[i] = 0.0;
-    }
 
     for (fnum = 1; fnum <= FNUN; ++fnum){
+        PMM_Psi(D_ul,D_ll,m, x, y, fnum);
 
         PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
         PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
