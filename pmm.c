@@ -28,9 +28,9 @@ void PMM_Psi(int D_ul, int D_ll, int k, double *x, double *y, int fnum){
        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? x[i]*sin(x[i]) : sqrt((double) i+1 ); }
     }else if (fnum == 3) {
         for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) : 1.0; }
-       // for (i = 0; i < D_ll; ++i) { y[i] = i < k ? (10.0/(1.0 + 2.5*x[i]*x[i])) - 10.0 : 0.0; }
     }else if (fnum == 4) {
-       for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]) : 0.0; }
+       for (i = 0; i < D_ll; ++i) { y[i] = i < k ? (10.0/(1.0 + 2.5*x[i]*x[i])) : 0.0; }
+       // for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) + sin(2.0*PI*x[i]) : 0.0; }
     }else if (fnum == 5 || fnum == 8 || fnum == 9) {
        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? x[i] : 0.0; }
     }else if (fnum == 7) {
@@ -226,18 +226,20 @@ void PMM4_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    q = 10*k;
     for (i = 0; i < k; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += pow( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]),  2);
         r += x[i]*x[i];
     }
-
 
     p1 = q  - r;
 
     q = r = 0.0;
+    q = 10*(D_ll - k);
+    for (i = k; i < D_ll; ++i){
+        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+    }
+
     for (i = k; i < D_ul; ++i){
-        q += pow( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]),  2);
         r += x[i]*x[i];
     }
 
@@ -251,9 +253,8 @@ void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    q = 10*k;
     for (i = 0; i < k; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += pow( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]),  2);
         r += x[i]*x[i];
     }
 
@@ -261,8 +262,12 @@ void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     p1 = q  - r;
 
     q = r = 0.0;
+    q = 10*(D_ll - k);
+    for (i = k; i < D_ll; ++i){
+        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+    }
+
     for (i = k; i < D_ul; ++i){
-        q += pow( y[i] - 10.0  / (1.0 + 2.5*x[i]*x[i]),  2);
         r += x[i]*x[i];
     }
 
