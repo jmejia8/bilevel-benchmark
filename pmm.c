@@ -25,7 +25,7 @@ void PMM_Psi(int D_ul, int D_ll, int k, double *x, double *y, int fnum){
         for (i = 0; i < D_ll; ++i) { y[i] = i < k ? 0.01*pow(x[i], 3) : 0.0; }
         y[k] = -10.0; 
     }else if (fnum == 2) {
-       for (i = 0; i < D_ll; ++i) { y[i] = i < k ? x[i]*sin(x[i]) : 0.0; }
+       for (i = 0; i < D_ll; ++i) { y[i] = i < k ? x[i]*sin(x[i]) : sqrt((double) i+1 ); }
     }else if (fnum == 3) {
        for (i = 0; i < D_ll; ++i) { y[i] = i < k ? (10.0/(1.0 + 2.5*x[i]*x[i])) - 10.0 : 0.0; }
     }else if (fnum == 4) {
@@ -101,27 +101,28 @@ void PMM2_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double a = 0.0, s = 0.0;
 
+    q = pow(y[0] - x[0]*sin(x[0]), 2);
     r += x[0]*x[0];
     for (i = 0; i < k; ++i){
-        a = pow(y[i] - sqrt( (double) i + 1.0 ),  2);
-        q += a*a;
-        s += a;
-        if (i == 0) continue;
-        r += 1e6*x[i]*x[i];
-    }
-
-
-    q += pow(0.5*s, 2) + pow(0.5*s, 4);
-
-    p1 = q  - r;
-
-    q = pow(y[k] - x[k]*sin(x[k]), 2);
-    r = x[k]*x[k];
-    for (i = k+1; i < D_ul; ++i){
         q += 1e6 * pow(y[i] - x[i]*sin(x[i]), 2);
         r += x[i]*x[i];
     }
 
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    r = x[k]*x[k];
+    for (i = k; i < D_ul; ++i){
+        a = y[i] - sqrt( (double) i + 1.0 );
+        q += a*a;
+        s += a;
+        if (i == k) continue;
+        r += 1e6*x[i]*x[i];
+    }
+
+    q += pow(0.5*s, 2) + pow(0.5*s, 4);
     p2 = q - r;
 
     F[0] = fabs(p1) + fabs(p2);
@@ -134,27 +135,28 @@ void PMM2_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double a = 0.0, s = 0.0;
 
+    q = pow(y[0] - x[0]*sin(x[0]), 2);
     r += x[0]*x[0];
     for (i = 0; i < k; ++i){
-        a = pow(y[i] - sqrt( (double) i + 1.0 ),  2);
-        q += a*a;
-        s += a;
-        if (i == 0) continue;
-        r += 1e6*x[i]*x[i];
-    }
-
-
-    q += pow(0.5*s, 2) + pow(0.5*s, 4);
-
-    p1 = q  - r;
-
-    q = pow(y[k] - x[k]*sin(x[k]), 2);
-    r = x[k]*x[k];
-    for (i = k+1; i < D_ul; ++i){
         q += 1e6 * pow(y[i] - x[i]*sin(x[i]), 2);
         r += x[i]*x[i];
     }
 
+
+
+    p1 = q  - r;
+
+    q = r = 0.0;
+    r = x[k]*x[k];
+    for (i = k; i < D_ul; ++i){
+        a = y[i] - sqrt( (double) i + 1.0 );
+        q += a*a;
+        s += a;
+        if (i == k) continue;
+        r += 1e6*x[i]*x[i];
+    }
+
+    q += pow(0.5*s, 2) + pow(0.5*s, 4);
     p2 = q - r;
 
     f[0] = p1 + p2;
