@@ -46,10 +46,10 @@ double PMM_test2(int D_ul, int D_ll){
         PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
         PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
 
-        f_sum += fabs( f[0]);
+        f_sum += fabs( F[0] + f[0]);
         f_sum += F[0] < 0 ? fabs(F[0]) : 0.0;
         
-        if (fnum > 5 && DEBUG) {
+        if (fnum > 6 && DEBUG) {
             printf("PMM%d \t F = %.4e \t f = %.4e \t G = %.4e \t g = %.4e\n", fnum, F[0], f[0], G[0], g[0]);
         }else if (DEBUG){
             printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
@@ -71,7 +71,7 @@ double PMM_test2(int D_ul, int D_ll){
         PMM_leader(D_ul, D_ll, x, y, F,G, fnum);
         PMM_follower(D_ul, D_ll, x, y, f, g, fnum);
 
-        if (fnum <= 5) {
+        if (fnum <= 6) {
             f_sum += fabs( F[0] + f[0] );
             if (DEBUG) printf("PMM%d \t F = %.4e \t f = %.4e\n", fnum, F[0], f[0]);
         }else{
