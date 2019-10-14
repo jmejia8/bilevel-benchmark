@@ -97,11 +97,10 @@ double PMM_test(int D_ul, int D_ll){
 int test(){
     int settings[6];
     int D_ul = 5,  D_ll = 5;
-    int id;
+    int id=1;
 
     blb18_cop_settings(D_ul, D_ll, settings, id);
 
-    int p = settings[0], q = settings[1], r = settings[2], s = settings[3];
     int lenG, leng;
 
     double *x = array(D_ul);

@@ -131,10 +131,10 @@ void TP_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fnu
 
 
 void TP1_leader(int nx, int ny, double *x, double *y, double *F, double *G){
-    double x1 = x[0];
-    double x2 = x[1];
-    double y1 = y[0];
-    double y2 = y[1];    
+    // double x1 = x[0];
+    // double x2 = x[1];
+    // double y1 = y[0];
+    // double y2 = y[1];    
     //At optima x1=20,x2=5,y1=10,y2=5,fu=-225
     F[0] = pow(x[1]-30.0, 2) + pow(x[2]-20.0, 2) - 20.0*y[1] + 20.0*y[2];
         
@@ -271,7 +271,7 @@ void TP8_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double y1 = y[0];
     double y2 = y[1];
     
-    F[0] = abs(2*x1+2*x2-3*y1-3*y2-60);
+    F[0] = fabs(2*x1+2*x2-3*y1-3*y2-60);
         
     
     //////////////////////////////////////////////////////////////////////////
