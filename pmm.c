@@ -281,8 +281,9 @@ void PMM5_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
+    q = 10*k;
     for (i = 0; i < k; ++i){
-        q += pow(fabs(y[i]), 2 + i);
+        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
@@ -290,9 +291,10 @@ void PMM5_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     p1 = q  - r;
 
     q = r = 0.0;
-    q = 10*(D_ul - k);
+    for (i = k; i < D_ll; ++i){
+        q += pow(fabs(y[i]), i - k + 2);
+    }
     for (i = k; i < D_ul; ++i){
-        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
@@ -306,8 +308,9 @@ void PMM5_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
+    q = 10*k;
     for (i = 0; i < k; ++i){
-        q += pow(fabs(y[i]), 2 + i);
+        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
@@ -315,9 +318,10 @@ void PMM5_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     p1 = q  - r;
 
     q = r = 0.0;
-    q = 10*(D_ul - k);
+    for (i = k; i < D_ll; ++i){
+        q += pow(fabs(y[i]), i - k + 2);
+    }
     for (i = k; i < D_ul; ++i){
-        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
