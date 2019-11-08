@@ -341,7 +341,7 @@ void PMM6_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
         r += x[i]*x[i];
     }
 
-    q = 1.0 + ( 1.0 / 40.0 )*q - prod;
+    q = 1.0 + ( 1.0 / 4000.0 )*q - prod;
 
     p1 = q  - r;
 
@@ -371,7 +371,7 @@ void PMM6_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
         r += x[i]*x[i];
     }
 
-    q = 1.0 + ( 1.0 / 40.0 )*q - prod;
+    q = 1.0 + ( 1.0 / 4000.0 )*q - prod;
 
     p1 = q  - r;
 
