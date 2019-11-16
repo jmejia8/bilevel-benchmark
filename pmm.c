@@ -233,9 +233,9 @@ void PMM4_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     p1 = q  - r;
 
     q = r = 0.0;
-    q = 10*(D_ll - k);
+    q = 10.0*(D_ll - k);
     for (i = k; i < D_ll; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += y[i]*y[i]- 10.0*cos( 2*PI *y[i]);
     }
 
     for (i = k; i < D_ul; ++i){
@@ -261,9 +261,9 @@ void PMM4_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     p1 = q  - r;
 
     q = r = 0.0;
-    q = 10*(D_ll - k);
+    q = 10.0*(D_ll - k);
     for (i = k; i < D_ll; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += y[i]*y[i]- 10.0*cos( 2*PI *y[i]);
     }
 
     for (i = k; i < D_ul; ++i){
@@ -280,9 +280,9 @@ void PMM5_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    q = 10*k;
+    q = 10.0*k;
     for (i = 0; i < k; ++i){
-        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
+        q += pow( y[i] - x[i], 2 ) - 10.0*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
@@ -307,9 +307,9 @@ void PMM5_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 
     double p1  = 0.0, p2  = 0.0, q = 0.0, r = 0.0;
 
-    q = 10*k;
+    q = 10.0*k;
     for (i = 0; i < k; ++i){
-        q += pow( y[i] - x[i], 2 ) - 10*cos(2.0*PI*(y[i] - x[i]));
+        q += pow( y[i] - x[i], 2 ) - 10.0*cos(2.0*PI*(y[i] - x[i]));
         r += x[i]*x[i];
     }
 
@@ -337,21 +337,21 @@ void PMM6_leader(int D_ul, int D_ll, int k, double *x, double *y, double *F){
     double prod = 1.0;
     for (i = 0; i < k; ++i){
         q += pow( y[i] - x[i], 2 );
-        prod *= cos( 10*(y[i] - x[i]) / sqrt( i + 1 ) );
+        prod *= cos( 10.0*(y[i] - x[i]) / sqrt( i + 1 ) );
         r += x[i]*x[i];
     }
 
-    q = 1.0 + ( 1.0 / 4000.0 )*q - prod;
+    q = 1.0 + ( 1.0 / 4.0 )*q - prod;
 
     p1 = q  - r;
 
-    q = 10*(D_ll - k);
-    r = 10*(D_ul - k);
+    q = 10.0*(D_ll - k);
+    r = 10.0*(D_ul - k);
     for (i = k; i < D_ll; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += y[i]*y[i]- 10.0*cos( 2*PI *y[i]);
     }
     for (i = k; i < D_ul; ++i){
-        r += x[i]*x[i]- 10*cos( 2*PI *x[i]);
+        r += x[i]*x[i]- 10.0*cos( 2*PI *x[i]);
     }
 
     p2 = q - r;
@@ -367,21 +367,21 @@ void PMM6_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
     double prod = 1.0;
     for (i = 0; i < k; ++i){
         q += pow( y[i] - x[i], 2 );
-        prod *= cos( 10*(y[i] - x[i]) / sqrt( i + 1 ) );
+        prod *= cos( 10.0*(y[i] - x[i]) / sqrt( i + 1 ) );
         r += x[i]*x[i];
     }
 
-    q = 1.0 + ( 1.0 / 4000.0 )*q - prod;
+    q = 1.0 + ( 1.0 / 4.0 )*q - prod;
 
     p1 = q  - r;
 
-    q = 10*(D_ll - k);
-    r = 10*(D_ul - k);
+    q = 10.0*(D_ll - k);
+    r = 10.0*(D_ul - k);
     for (i = k; i < D_ll; ++i){
-        q += y[i]*y[i]- 10*cos( 2*PI *y[i]);
+        q += y[i]*y[i]- 10.0*cos( 2*PI *y[i]);
     }
     for (i = k; i < D_ul; ++i){
-        r += x[i]*x[i]- 10*cos( 2*PI *x[i]);
+        r += x[i]*x[i]- 10.0*cos( 2*PI *x[i]);
     }
 
     p2 = q - r;
