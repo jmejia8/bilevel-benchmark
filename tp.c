@@ -312,7 +312,7 @@ void TP10_leader(int nx, int ny, double *x, double *y, double *F){
 
 
 void TP1_follower(int nx, int ny, double *x, double *y, double *f){
-    f[0] = pow(x[1] - y[1], 2) + pow(x[2] - y[2], 2);
+    f[0] = pow(x[1] - y[1], 2) + pow(x[0] - y[0], 2);
 }
 void TP2_follower(int nx, int ny, double *x, double *y, double *f, double *g){
 
