@@ -467,7 +467,7 @@ void SMD9_leader(int p, int q, int r, double *x, double *y, double *F, double *G
 
     G[0] = (sphere(x_u1, p) + sphere(x_u2, r)) / a;
     G[0] -= floor( G[0] + 0.5 / b);
-    G[0] *= 1.0;
+    G[0] *= -1.0;
 }
 
 void SMD9_follower(int p, int q, int r, double *x, double *y, double *f, double *g){
