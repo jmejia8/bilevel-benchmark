@@ -1,5 +1,7 @@
+#include <stdio.h>
 #include "constants.h"
 
+//  D_ul, D_ll, lenG, leng = settings
 void TP_config(int *settings, int fnum){
     if (fnum <= 8) {
         settings[0] = 2;
@@ -65,6 +67,30 @@ void TP_solutions(int nx, int ny, double *x, double *y, int fnum){
         x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
     } else if (fnum == 9 || fnum == 10) {
         x[0]=0; x[1]=30; y[0]=-10; y[1]=10; // fu=0; // fl=-100
+    }
+    
+}
+
+
+void TP_optimum(double *F, double *f, int fnum){
+    if (fnum == 1){
+        F[0] = 225.0; f[0] = 100.0;
+    } else if (fnum == 2){
+        F[0] = 0.0; f[0] = 100.0;
+    } else if (fnum == 3){
+        F[0] = -18.6787; f[0] = -1.0156;
+    } else if (fnum == 4){
+        F[0] = -29.2; f[0] = 3.2;
+    } else if (fnum == 5){
+        F[0] = -3.6; f[0] = -2.0;
+    } else if (fnum == 6){
+        F[0] = -1.2098; f[0] = 7.6172;
+    } else if (fnum == 7) {
+        F[0] = -1.961; f[0] = 1.961;
+    } else if (fnum == 8){
+        F[0] = 0.0; f[0] = 100.0;
+    } else if (fnum == 9 || fnum == 10) {
+        F[0] = 0.0; f[0] = 1.0;
     }
     
 }
@@ -136,13 +162,13 @@ void TP1_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     // double y1 = y[0];
     // double y2 = y[1];    
     //At optima x1=20,x2=5,y1=10,y2=5,fu=-225
-    F[0] = pow(x[1]-30.0, 2) + pow(x[2]-20.0, 2) - 20.0*y[1] + 20.0*y[2];
+    F[0] = pow(x[0]-30.0, 2) + pow(x[1]-20.0, 2) - 20.0*y[0] + 20.0*y[1];
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
-    G[0] = 30.0 - x[1] - 2*x[2];
-    G[1] = x[1] + x[2] - 25.0;
+    G[0] = 30.0 - x[0] - 2.0*x[1];
+    G[1] = x[0] + x[1] - 25.0;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP2_leader(int nx, int ny, double *x, double *y, double *F, double *G){
@@ -152,15 +178,15 @@ void TP2_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double x2 = x[1];
     double y1 = y[0];
     double y2 = y[1];
-    F[0] = 2*x1 + 2*x2 - 3*y1 - 3*y2 - 60.0;
+    F[0] = 2.0*x1 + 2.0*x2 - 3*y1 - 3*y2 - 60.0;
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
-    G[0] = x1 + x2 + y1 - 2*y2 - 40.0;
+    G[0] = x1 + x2 + y1 - 2.0*y2 - 40.0;
     //Lower level constraints included at upper level
-    G[1] = 10.0 - x1 + 2*y1;
-    G[2] = 10.0 - x2 + 2*y2;
+    G[1] = 10.0 - x1 + 2.0*y1;
+    G[2] = 10.0 - x2 + 2.0*y2;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP3_leader(int nx, int ny, double *x, double *y, double *F, double *G){
@@ -170,15 +196,15 @@ void TP3_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double x2 = x[1];
     double y1 = y[0];
     double y2 = y[1];
-    F[0] = -pow(x1, 2) - 3*pow(x2, 2) - 4*y1 + pow(y2, 2);
+    F[0] = -pow(x1, 2) - 3*pow(x2, 2) - 4.0*y1 + pow(y2, 2);
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
-    G[0] = pow(x1, 2) + 2*x2 - 4;
+    G[0] = pow(x1, 2) + 2.0*x2 - 4;
     //Lower level constraints included at upper level
-    G[1] = -3-pow(x1, 2)+2*x1 - pow(x2, 2)+2*y1-y2;
-    G[2] = 4-x2-3*y1+4*y2;
+    G[1] = -3-pow(x1, 2)+2.0*x1 - pow(x2, 2)+2.0*y1-y2;
+    G[2] = 4-x2-3*y1+4.0*y2;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP4_leader(int nx, int ny, double *x, double *y, double *F, double *G){
@@ -189,16 +215,16 @@ void TP4_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double y1 = y[0];
     double y2 = y[1];
     double y3 = y[2];
-    F[0] = -8*x1 - 4*x2 + 4*y1 - 40*y2 - 4*y3;
+    F[0] = -8.0*x1 - 4.0*x2 + 4.0*y1 - 40.0*y2 - 4.0*y3;
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
     //G = [];
     //Lower level constraints included at upper level
-    G[0] = y2+y3-y1-1;
-    G[1] = 2*x1-y1+2*y2-0.5*y3-1;
-    G[2] = 2*x2+2*y1-y2-0.5*y3-1;
+    G[0] = y2+y3-y1-1.0;
+    G[1] = 2.0*x1-y1+2.0*y2-0.5*y3-1.0;
+    G[2] = 2.0*x2+2.0*y1-y2-0.5*y3-1.0;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP5_leader(int nx, int ny, double *x, double *y, double *F, double *G){
@@ -213,7 +239,7 @@ void TP5_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     // x = [x1 x2]'; //'
     // y = [y1 y2]'; //'
     
-    F[0] = r*(x1*x1 + x2*x2) - 3*y1 - 4*y2 + 0.5*(y1*y1 + y2*y2);
+    F[0] = r*(x1*x1 + x2*x2) - 3*y1 - 4.0*y2 + 0.5*(y1*y1 + y2*y2);
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
@@ -230,17 +256,17 @@ void TP6_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double y1 = y[0];
     double y2 = y[1];
 
-    F[0] = pow((x1-1), 2) + 2*y1 - 2*x1;
+    F[0] = pow((x1-1.0), 2) + 2.0*y1 - 2.0*x1;
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
     //G = [];
     //Lower level constraints included at upper level
-    G[0] = 4*x1+5*y1+4*y2-12;
-    G[1] = 4*y2-4*x1-5*y1+4;
-    G[2] = 4*x1-4*y1+5*y2-4;
-    G[3] = 4*y1-4*x1+5*y2-4;
+    G[0] = 4.0*x1+5.0*y1+4.0*y2-12.0;
+    G[1] = 4.0*y2-4.0*x1-5.0*y1+4.0;
+    G[2] = 4.0*x1-4.0*y1+5.0*y2-4.0;
+    G[3] = 4.0*y1-4.0*x1+5.0*y2-4.0;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP7_leader(int nx, int ny, double *x, double *y, double *F, double *G){
@@ -251,7 +277,7 @@ void TP7_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double y1 = y[0];
     double y2 = y[1];
 
-    F[0] = -(x1+y1) * (x2+y2) / (1+x1 * y1+x2 * y2);
+    F[0] = -(x1+y1) * (x2+y2) / (1.0+x1 * y1+x2 * y2);
         
     
     //////////////////////////////////////////////////////////////////////////
@@ -271,15 +297,15 @@ void TP8_leader(int nx, int ny, double *x, double *y, double *F, double *G){
     double y1 = y[0];
     double y2 = y[1];
     
-    F[0] = fabs(2*x1+2*x2-3*y1-3*y2-60);
+    F[0] = fabs(2.0*x1+2.0*x2-3*y1-3*y2-60);
         
     
     //////////////////////////////////////////////////////////////////////////
     // constraints here
-    G[0] = x1+x2+y1-2*y2-40.0;
+    G[0] = x1+x2+y1-2.0*y2-40.0;
     //Lower level constraints included at upper level
-    G[1] = 2*y1-x1 + 10.0;
-    G[2] = 2*y2-x2 + 10.0;
+    G[1] = 2.0*y1-x1 + 10.0;
+    G[2] = 2.0*y2-x2 + 10.0;
     //////////////////////////////////////////////////////////////////////////
 }
 void TP9_leader(int nx, int ny, double *x, double *y, double *F){
@@ -320,13 +346,13 @@ void TP2_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     double x2 = x[1];
     double y1 = y[0];
     double y2 = y[1];
-    f[0] = pow(y1-x1+20, 2) +  pow(y2-x2+20, 2);
+    f[0] = pow(y1-x1+20.0, 2) +  pow(y2-x2+20.0, 2);
 
 
     //////////////////////////
     // constraints here
-    g[0] = 10-x1+2*y1;
-    g[1] = 10-x2+2*y2;
+    g[0] = 10-x1+2.0*y1;
+    g[1] = 10-x2+2.0*y2;
     //////////////////////////
 }
 void TP3_follower(int nx, int ny, double *x, double *y, double *f, double *g){
@@ -335,13 +361,13 @@ void TP3_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     double x2 = x[1];
     double y1 = y[0];
     double y2 = y[1];
-    f[0] = 2*pow(x1, 2)+pow(y1, 2)-5*y2;
+    f[0] = 2.0*pow(x1, 2)+pow(y1, 2)-5.0*y2;
 
 
     //////////////////////////
     // constraints here
-    g[0] = -3-pow(x1, 2)+2*x1-pow(x2, 2)+2*y1-y2;
-    g[1] = 4-x2-3*y1+4*y2;
+    g[0] = -3-pow(x1, 2)+2.0*x1-pow(x2, 2)+2.0*y1-y2;
+    g[1] = 4-x2-3*y1+4.0*y2;
     //////////////////////////
 }
 void TP4_follower(int nx, int ny, double *x, double *y, double *f, double *g){
@@ -351,14 +377,14 @@ void TP4_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     double y1 = y[0];
     double y2 = y[1];
     double y3 = y[2];
-    f[0] = x1+2*x2+y1+y2+2*y3;
+    f[0] = x1+2.0*x2+y1+y2+2.0*y3;
 
 
     //////////////////////////
     // constraints here
-    g[0] = y2+y3-y1-1;
-    g[1] = 2*x1-y1+2*y2-0.5*y3-1;
-    g[2] = 2*x2+2*y1-y2-0.5*y3-1;
+    g[0] = y2+y3-y1-1.0;
+    g[1] = 2.0*x1-y1+2.0*y2-0.5*y3-1;
+    g[2] = 2.0*x2+2.0*y1-y2-0.5*y3-1;
     //////////////////////////
 }
 void TP5_follower(int nx, int ny, double *x, double *y, double *f, double *g){
@@ -373,7 +399,7 @@ void TP5_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     // x = [x1 x2]';
     // y = [y1 y2]';
     
-    f[0] =  y1 * (- x1 + 2*x2) + y1 * (0.5*y1 + 1.5*y2) + y2 * (3*x1 - 3*x2) + y2 * (1.5*y1 + 5.0*y2);
+    f[0] =  y1 * (- x1 + 2.0*x2) + y1 * (0.5*y1 + 1.5*y2) + y2 * (3.0*x1 - 3.0*x2) + y2 * (1.5*y1 + 5.0*y2);
 
 
     //////////////////////////
@@ -388,15 +414,15 @@ void TP6_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     double y1 = y[0];
     double y2 = y[1];
     
-    f[0] = pow(2*y1-4, 2) + pow(2*y2-1, 2) + x1*y1;
+    f[0] = pow(2.0*y1-4, 2) + pow(2.0*y2-1, 2) + x1*y1;
 
 
     //////////////////////////
     // constraints here
-    g[0] = 4*x1+5*y1+4*y2-12;
-    g[1] = 4*y2-4*x1-5*y1+4;
-    g[2] = 4*x1-4*y1+5*y2-4;
-    g[3] = 4*y1-4*x1+5*y2-4;
+    g[0] = 4.0*x1+5.0*y1+4.0*y2-12;
+    g[1] = 4.0*y2-4.0*x1-5.0*y1+4;
+    g[2] = 4.0*x1-4.0*y1+5.0*y2-4;
+    g[3] = 4.0*y1-4.0*x1+5.0*y2-4;
     //////////////////////////
 }
 void TP7_follower(int nx, int ny, double *x, double *y, double *f, double *g){
@@ -422,13 +448,13 @@ void TP8_follower(int nx, int ny, double *x, double *y, double *f, double *g){
     double y1 = y[0];
     double y2 = y[1];
 
-    f[0] = pow(y1-x1+20, 2)+ pow(y2-x2+20, 2);
+    f[0] = pow(y1-x1+20.0, 2)+ pow(y2-x2+20.0, 2);
 
 
     //////////////////////////
     // constraints here
-    g[0] = 2*y1-x1 + 10.0;
-    g[1] = 2*y2-x2 + 10.0;
+    g[0] = 2.0*y1-x1 + 10.0;
+    g[1] = 2.0*y2-x2 + 10.0;
     //////////////////////////
 }
 void TP9_follower(int nx, int ny, double *x, double *y, double *f){
@@ -467,3 +493,100 @@ void TP10_follower(int nx, int ny, double *x, double *y, double *f){
 }
 
 
+void TP_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
+    if ( fnum == 1 ) {
+        TP1_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 2) {
+        TP2_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 3) {
+        TP3_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 4) {
+        TP4_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 5) {
+        TP5_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 6) {
+        TP6_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 7) {
+        TP7_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 8) {
+        TP8_leader(D_ul, D_ll, x, y, F, G);
+    }else if (fnum == 9) {
+        TP9_leader(D_ul, D_ll, x, y, F);
+    }else if (fnum == 10) {
+        TP10_leader(D_ul, D_ll, x, y, F);
+    }
+}
+
+void TP_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g, int fnum){
+    if ( fnum == 1 ) {
+        TP1_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 2) {
+        TP2_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 3) {
+        TP3_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 4) {
+        TP4_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 5) {
+        TP5_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 6) {
+        TP6_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 7) {
+        TP7_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 8) {
+        TP8_follower(D_ul, D_ll, x, y, f, g);
+    }else if (fnum == 9) {
+        TP9_follower(D_ul, D_ll, x, y, f);
+    }else if (fnum == 10) {
+        TP10_follower(D_ul, D_ll, x, y, f);
+    }
+}
+
+void TP_test(int fnum)
+{
+    printf("========================\n");
+    printf("Test TP%d\n", fnum);
+    printf("========================\n");
+    int settings[4];
+    TP_config(settings, fnum);
+    int D_ul = settings[0], D_ll = settings[1];
+    int lenG = settings[2], leng = settings[3];
+
+    double x[D_ul], y[D_ll], F[1], f[1], F_true[1], f_true[1];
+
+    TP_optimum(F, f, fnum);
+
+    // printf("F[0] = %g\n", F[0]);
+    // printf("f[0] = %g\n", f[0]);
+    // printf("_-_\n");
+    double G[lenG], g[leng];
+    TP_solutions(0,0, x, y, fnum);
+    TP_leader(0,0,x,y,F_true,G, fnum);
+    TP_follower(0,0,x,y,f_true,g, fnum);
+
+    if (fabs(F_true[0] - F[0]) > 1e-1) {
+        printf("Error TP%d_leader\n", fnum);
+        printf("F[0] = %g\n", F[0]);
+        printf("F[0] = %g\n", F_true[0]);
+    }
+
+    int i;
+    printf("G = ");
+    for (i = 0; i < lenG; ++i) {
+        printf("%g ", G[i]);
+    }
+    printf("\ng = ");
+
+    for (i = 0; i < leng; ++i) {
+        printf("%g ", g[i]);
+    }
+    printf("\n");
+    
+    if (fabs(f_true[0] - f[0]) > 1e-1) {
+        printf("Error TP%d_follwer\n", fnum);
+        printf("f[0] = %g\n", f[0]);
+        printf("f[0] = %g\n", f_true[0]);
+    }
+
+
+
+}
