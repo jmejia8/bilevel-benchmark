@@ -467,6 +467,7 @@ void SMD9_leader(int p, int q, int r, double *x, double *y, double *F, double *G
 
     G[0] = (sphere(x_u1, p) + sphere(x_u2, r)) / a;
     G[0] -= floor( G[0] + 0.5 / b);
+    G[0] *= 1.0;
 }
 
 void SMD9_follower(int p, int q, int r, double *x, double *y, double *f, double *g){
@@ -488,6 +489,8 @@ void SMD9_follower(int p, int q, int r, double *x, double *y, double *f, double 
 
     g[0] = (sphere(x_l1, p) + sphere(x_l2, r)) / a;
     g[0] -= floor( g[0] + 0.5 / b);
+    
+    g[0] *= -1.0;
 }
 
 void SMD10_leader(int p, int q, int r, double *x, double *y, double *F, double *G){
@@ -524,10 +527,12 @@ void SMD10_leader(int p, int q, int r, double *x, double *y, double *F, double *
 
     for (i = 0; i < p; ++i) {
         G[i] = x_u1[i] - (sum_xu1_3 - xu1_3[i]) - sum_xu2_3;
+        G[i] *= -1.0;
     }
 
     for (i = 0; i < r; ++i) {
         G[p + i] = x_u2[i] - (sum_xu2_3 - xu2_3[i]) - sum_xu1_3;
+        G[p + i] *= -1.0;
     }
 
 }
@@ -562,6 +567,7 @@ void SMD10_follower(int p, int q, int r, double *x, double *y, double *f, double
 
     for (i = 0; i < q; ++i) {
         g[i] = x_l1[i] - (sum_xl1_3 - xl1_3[i]);
+        g[i] *= -1.0;
     }
 
 
@@ -587,6 +593,7 @@ void SMD11_leader(int p, int q, int r, double *x, double *y, double *F, double *
     
     for (i = 0; i < r; ++i) {
         G[i] = x_u2[i] - a - log(x_l2[i]);
+        G[i] *= -1.0;
     }
 }
 
@@ -610,6 +617,7 @@ void SMD11_follower(int p, int q, int r, double *x, double *y, double *f, double
     for (i = 0; i < r; ++i) {
         g[0] += pow(x_u2[i] - log(x_l2[i]) ,2);
     }
+    g[0] *= -1.0;
 }
 void SMD12_leader(int p, int q, int r, double *x, double *y, double *F, double *G){
     int i;
@@ -633,6 +641,7 @@ void SMD12_leader(int p, int q, int r, double *x, double *y, double *F, double *
 
     for (i = 0; i < r; ++i) {
         G[i] = x_u2[i] - tan(x_l2[i]);
+        G[i] *= -1.0;
     }
 
     //////////////////////////////////////////////////////////
@@ -651,11 +660,13 @@ void SMD12_leader(int p, int q, int r, double *x, double *y, double *F, double *
 
     for (i = 0; i < p; ++i) {
         G[r+i] = x_u1[i] - (sum_xu1_3 - xu1_3[i]) - sum_xu2_3;
+        G[r+i] *= -1.0;
     }
 
     p +=r ;
     for (i = 0; i < r; ++i) {
         G[p + i] = x_u2[i] - (sum_xu2_3 - xu2_3[i]) - sum_xu1_3;
+        G[p+i] *= -1.0;
     }
 }
 
@@ -688,8 +699,9 @@ void SMD12_follower(int p, int q, int r, double *x, double *y, double *f, double
 
 
     g[0] = f3-1.0;
-
+    g[0] *= -1.0;
     for (i = 1; i <= q; ++i) {
         g[i] = x_l1[i] - (sum_xl1_3 - xl1_3[i]);
+        g[i] *= -1.0;
     }
 }

@@ -148,9 +148,20 @@ int test(){
     return 1;
 }
 
+
+void test_TP()
+{
+    int max_fnum = 10;
+    int fnum;
+    for (fnum = 1; fnum <= max_fnum; ++fnum) {
+        TP_test(fnum);
+    }
+}
+
 int main(int argc, char const *argv[])
 {  
     srand(time(NULL));
+    test_TP();
     double r = PMM_test(5, 10);
     if (r > 1e-16) {
         printf("Errors in PMM: %g\n", r);
