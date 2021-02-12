@@ -94,12 +94,13 @@ void SMD_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, int fn
 
         ll1_a = -5.0; ll1_b = 10.0;
         ll2_a = 1.0/E; ll2_b = E;
-    } else if (fnum == 12) {
+    } else if (fnum == 12) { // from matlab version which is inconsistent with the paper
+        // but correct for experiments
         ul1_a = -5.0; ul1_b = 10.0;
-        ul2_a = -14.10; ul2_b = 14.10;
+        ul2_a = -1.0; ul2_b = 1.0;
 
         ll1_a = -5.0; ll1_b = 10.0;
-        ll2_a = -1.5 + EPS; ll2_b = 1.5 - EPS;
+        ll2_a = -PI / 4.0 + EPS; ll2_b = PI / 4.0 - EPS;
     }else{
         ul1_a = 0.0; ul1_b = 0.0; ul2_a = 0.0; ul2_b = 0.0; ll1_a = 0.0;
         ll1_b = 0.0; ll2_a = 0.0; ll2_b=0.0;
@@ -613,7 +614,7 @@ void SMD11_follower(int p, int q, int r, double *x, double *y, double *f, double
 
     f[0] = f1 + f2 + f3;
 
-    g[0] = 0.0;
+    g[0] = -1.0;
     for (i = 0; i < r; ++i) {
         g[0] += pow(x_u2[i] - log(x_l2[i]) ,2);
     }
@@ -666,7 +667,7 @@ void SMD12_leader(int p, int q, int r, double *x, double *y, double *F, double *
     p +=r ;
     for (i = 0; i < r; ++i) {
         G[p + i] = x_u2[i] - (sum_xu2_3 - xu2_3[i]) - sum_xu1_3;
-        G[p+i] *= -1.0;
+        G[p + i] *= -1.0;
     }
 }
 
