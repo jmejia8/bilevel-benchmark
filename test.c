@@ -115,7 +115,7 @@ int test(){
     for (id = 1; id <= 12; ++id){
 
         if (id > 8) {
-            blb18_cop_settings(D_ul, D_ll, settings, id);
+            SMD_settings(D_ul, D_ll, settings, id);
             lenG = settings[4];
             leng = settings[5];
             G = array(lenG); g = array(leng);
@@ -123,7 +123,7 @@ int test(){
         }
 
 
-        blb18_cop_solutions(D_ul, D_ll, x, y, id);
+        SMD_solutions(D_ul, D_ll, x, y, id);
         blb18_leader_cop(1, D_ul, D_ll, x, y, F, G, id);
         blb18_follower_cop(1, D_ul, D_ll, x, y, f, g, id);
 
@@ -132,12 +132,21 @@ int test(){
             f_sum += F[0] + f[0];
         }
 
+        if (id >= 10) {
+            double F_true, f_true;
+            SMD_optimum(&F_true, &f_true, id);
+            float s = fabs(F[0] - F_true) + fabs(f[0] - f_true);
+            // printf("%d --> F = %.4e \t f = %.4e\n", id, fabs(F[0] - F_true), fabs(f[0] - f_true));
+            printf("%d --> F = %.4g \t f = %.4g\n", id, F[0], f[0]);
+            if (s > 1e-8) {
+                printf("Error in SMD%d\n", id);
+                f_sum += s;
+            }
+        }
+
 
          
     }
-
-    // SMD1_leader(p, q, r, x, y, F);
-    // SMD1_follower(p, q, r, x, y, f);
 
 
     if (abs(f_sum) > 1e-8){
@@ -170,6 +179,7 @@ int main(int argc, char const *argv[])
         printf("PMM: OK\n");
     }
     test();
+    return 0;
     int i, j, id, settings[6];
 
  

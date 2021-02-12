@@ -158,34 +158,6 @@ void blb18_cop_ranges(int D_ul, int D_ll, double *bounds_ul, double *bounds_ll, 
 }
 
 void blb18_cop_solutions(int D_ul, int D_ll, double *x, double *y, int fnum){
-
-    int settings[6], i;
-    blb18_cop_settings(D_ul, D_ll, settings, fnum);
-    int p = settings[0], q = settings[1], r = settings[2];
-
-    for (i = 0; i < D_ul; ++i)x[i] = 0;
-    for (i = 0; i < D_ll; ++i) y[i] = 0;
-
-    if (fnum == 2 || fnum == 7){
-        for (i = q; i < D_ll; ++i) y[i] = 1;
-    
-    } else if (fnum == 5 || fnum == 8) {
-        for (i = 0; i < D_ll; ++i) y[i] = 0;
-        for (i = 0; i < q; ++i) y[i] = 1; 
-    
-    } else if (fnum == 10) {
-        for (i = 0; i < D_ul; ++i) x[i] = 1.0 / sqrt(p + r - 1);
-        for (i = 0; i < q; ++i) y[i] = 1.0 / sqrt(q-1);
-        for (i = 0; i < r; ++i) y[q+i] = atan(x[p + i]);
-    
-    } else if (fnum == 11) {
-        for (i = 0; i < r; ++i) y[q + i] = exp(-1.0 / sqrt(r));
-    
-    } else if (fnum == 12) {
-        for (i = 0; i < D_ul; ++i) x[i] = 1.0 / sqrt(p+r-1);
-        for (i = 0; i < q; ++i) y[i] = 1.0 / sqrt(q-1);
-        for (i = 0; i < r; ++i) y[q+i] = atan( (1.0 / sqrt(p+r-1)) - (1.0 / sqrt(r)));
-        
-    }
+    SMD_solutions(D_ul, D_ll, x, y, fnum);
 }
 
