@@ -1,5 +1,9 @@
 #include "constants.h"
 
+
+/*
+ * save in `settings` the following values: upper level dimension, lower level dimension and `k`.
+*/
 void PMM_config(int D_ul, int D_ll, int *settings, int fnum){
     int k = D_ul < D_ll? D_ul : D_ll;
     k /= 2;
@@ -18,6 +22,13 @@ void PMM_config(int D_ul, int D_ll, int *settings, int fnum){
 
 }
 
+/*
+ * D_ul: upper level dimension
+ * D_ll: lower level dimension
+ * x: upper level decision vector
+ * fnum: function number, i.e., PMM<fnum>
+ * Save in y the lower level optimal solution, i.e., y in argmin f(x, y)
+*/
 void PMM_Psi(int D_ul, int D_ll, int k, double *x, double *y, int fnum){
     int i = 1;
 
@@ -390,6 +401,15 @@ void PMM6_follower(int D_ul, int D_ll, int k, double *x, double *y, double *f){
 }
 
 
+
+/*
+ * D_ul: upper level dimension
+ * D_ll: lower level dimension
+ * x: upper level decision vector
+ * y: lower level decision vector
+ * fnum: function number, i.e., PMM<fnum>
+ * Save in F, G the function and constraints values.
+*/
 void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, int fnum){
     int k = D_ul < D_ll? D_ul : D_ll;
     k /= 2;
@@ -416,6 +436,15 @@ void PMM_leader(int D_ul, int D_ll, double *x, double *y, double *F, double *G, 
     }*/
 }
 
+
+/*
+ * D_ul: upper level dimension
+ * D_ll: lower level dimension
+ * x: upper level decision vector
+ * y: lower level decision vector
+ * fnum: function number, i.e., PMM<fnum>
+ * Save in f, g the function and constraints values.
+*/
 void PMM_follower(int D_ul, int D_ll, double *x, double *y, double *f, double *g, int fnum){
     int k = D_ul < D_ll? D_ul : D_ll;
     k /= 2;
